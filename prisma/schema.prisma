@@ -26,5 +26,7 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   posts         Post[]
+  ownedPosts    String?
+  tempPosts     String?
   @@map(name: "users")
 }
