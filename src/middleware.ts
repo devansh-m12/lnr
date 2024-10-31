@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 import { auth } from "@/auth"
 
 // Define paths that require protection
-const protectedPaths = ['/dashboard', '/admin', '/api', '/sample']
+const protectedPaths = ['/dashboard', '/admin', '/sample']
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
