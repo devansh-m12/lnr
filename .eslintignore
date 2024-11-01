@@ -3,3 +3,6 @@ node_modules
 .next
 .prisma
 .vercel
+src
+prisma
+tailwind.config.ts
