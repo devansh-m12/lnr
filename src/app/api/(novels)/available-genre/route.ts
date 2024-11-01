@@ -7,11 +7,11 @@ export async function GET() {
       select: {
         id: true,
         name: true,
-        description: true
+        description: true,
       },
       orderBy: {
-        name: 'asc'
-      }
+        name: 'asc',
+      },
     });
 
     return NextResponse.json(genres);
@@ -19,7 +19,7 @@ export async function GET() {
     console.error('Error fetching genres:', error);
     return NextResponse.json(
       { error: 'Failed to fetch genres' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

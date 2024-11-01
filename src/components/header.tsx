@@ -17,22 +17,37 @@ export default function Header() {
   return (
     <header className="bg-transparent">
       <div className="px-7 py-7">
-        <div className="flex justify-between h-14 items-center">
+        <div className="flex h-14 items-center justify-between">
           {/* Left side - Logo/Name */}
           <div className="flex items-center space-x-6">
-            <Link href="/" className="flex items-center backdrop-blur-md bg-white/10 px-4 py-2 h-10">
-              <svg className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <Link
+              href="/"
+              className="flex h-10 items-center bg-white/10 px-4 py-2 backdrop-blur-md"
+            >
+              <svg
+                className="h-6 w-6 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
               </svg>
-              <span className="ml-2 text-xl font-bold text-foreground">AppName</span>
+              <span className="ml-2 text-xl font-bold text-foreground">
+                AppName
+              </span>
             </Link>
             <nav>
               <ul className="flex space-x-4">
                 {navItems.map((item) => (
                   <li key={item.name}>
-                    <Link 
+                    <Link
                       href={item.href}
-                      className="flex items-center backdrop-blur-md bg-white/10 px-3 py-2 h-10"
+                      className="flex h-10 items-center bg-white/10 px-3 py-2 backdrop-blur-md"
                     >
                       {item.name}
                     </Link>
@@ -48,20 +63,30 @@ export default function Header() {
               <div>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center space-x-2 text-foreground hover:text-foreground/80 focus:outline-none backdrop-blur-md bg-white/10 px-4 py-2 rounded-lg"
+                  className="flex items-center space-x-2 rounded-lg bg-white/10 px-4 py-2 text-foreground backdrop-blur-md hover:text-foreground/80 focus:outline-none"
                 >
                   <span>{session.user?.name || session.user?.email}</span>
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-lg backdrop-blur-md bg-white/10 ring-1 ring-white/20">
+                  <div className="absolute right-0 mt-2 w-48 rounded-lg bg-white/10 ring-1 ring-white/20 backdrop-blur-md">
                     <div className="py-1">
                       <button
                         onClick={() => signOut()}
-                        className="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-white/20"
+                        className="block w-full px-4 py-2 text-left text-sm text-foreground hover:bg-white/20"
                       >
                         Sign out
                       </button>
@@ -73,13 +98,13 @@ export default function Header() {
               <div className="flex space-x-4">
                 <Link
                   href="/auth/login"
-                  className="text-foreground hover:text-foreground/80 px-4 py-2 rounded-lg backdrop-blur-md bg-white/10"
+                  className="rounded-lg bg-white/10 px-4 py-2 text-foreground backdrop-blur-md hover:text-foreground/80"
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 backdrop-blur-md"
+                  className="rounded-lg bg-indigo-600 px-4 py-2 text-white backdrop-blur-md hover:bg-indigo-700"
                 >
                   Register
                 </Link>

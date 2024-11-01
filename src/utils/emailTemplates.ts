@@ -8,4 +8,4 @@ export function getVerificationEmailTemplate(otp: string): string {
       <p>If you didn't request this code, please ignore this email.</p>
     </div>
   `;
-} 
+}

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ContentStatus, ContentType } from '@prisma/client';
+import { ContentStatus } from '@prisma/client';
 import { ChevronLeft, BookOpen } from 'lucide-react';
 
 interface Chapter {
@@ -65,7 +65,7 @@ export default function NovelDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-900 text-gray-100">
         <div className="text-xl">Loading...</div>
       </div>
     );
@@ -73,7 +73,7 @@ export default function NovelDetailPage() {
 
   if (!novel) {
     return (
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-900 text-gray-100">
         <div className="text-xl">Novel not found</div>
       </div>
     );
@@ -82,26 +82,26 @@ export default function NovelDetailPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <div className="container mx-auto p-4">
-        <Link 
-          href="/novels" 
-          className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-6"
+        <Link
+          href="/novels"
+          className="mb-6 inline-flex items-center text-blue-400 hover:text-blue-300"
         >
           <ChevronLeft size={20} />
           Back to Novels
         </Link>
 
-        <div className="bg-gray-800 rounded-lg p-6 shadow-lg">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="rounded-lg bg-gray-800 p-6 shadow-lg">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {/* Cover Image */}
-            <div className="aspect-[3/4] bg-gray-700 rounded-lg overflow-hidden">
+            <div className="aspect-[3/4] overflow-hidden rounded-lg bg-gray-700">
               {novel.cover_image_url ? (
-                <img 
-                  src={novel.cover_image_url} 
+                <img
+                  src={novel.cover_image_url}
                   alt={novel.title}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="flex h-full w-full items-center justify-center">
                   <BookOpen size={64} className="text-gray-500" />
                 </div>
               )}
@@ -109,34 +109,39 @@ export default function NovelDetailPage() {
 
             {/* Novel Info */}
             <div className="md:col-span-2">
-              <h1 className="text-3xl font-bold mb-4">{novel.title}</h1>
+              <h1 className="mb-4 text-3xl font-bold">{novel.title}</h1>
               <div className="mb-4">
                 <span className="text-gray-400">By: </span>
                 <span className="text-blue-400">{novel.author.username}</span>
               </div>
-              
+
               <div className="mb-4 flex gap-4">
-                <div className="bg-gray-700 px-3 py-1 rounded">
+                <div className="rounded bg-gray-700 px-3 py-1">
                   <span className="text-gray-400">Status: </span>
                   <span className="text-blue-400">{novel.status}</span>
                 </div>
-                <div className="bg-gray-700 px-3 py-1 rounded">
+                <div className="rounded bg-gray-700 px-3 py-1">
                   <span className="text-gray-400">Rating: </span>
-                  <span className="text-yellow-400">{novel.rating.toFixed(1)}</span>
+                  <span className="text-yellow-400">
+                    {novel.rating.toFixed(1)}
+                  </span>
                 </div>
-                <div className="bg-gray-700 px-3 py-1 rounded">
+                <div className="rounded bg-gray-700 px-3 py-1">
                   <span className="text-gray-400">Views: </span>
                   <span className="text-green-400">{novel.views}</span>
                 </div>
               </div>
 
-              <p className="text-gray-300 mb-6">{novel.description}</p>
+              <p className="mb-6 text-gray-300">{novel.description}</p>
 
               <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">Genres:</h3>
+                <h3 className="mb-2 text-lg font-semibold">Genres:</h3>
                 <div className="flex flex-wrap gap-2">
                   {novel.genres.map(({ genre }) => (
-                    <span key={genre.id} className="bg-blue-600 px-3 py-1 rounded-full text-sm">
+                    <span
+                      key={genre.id}
+                      className="rounded-full bg-blue-600 px-3 py-1 text-sm"
+                    >
                       {genre.name}
                     </span>
                   ))}
@@ -144,10 +149,13 @@ export default function NovelDetailPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-2">Tags:</h3>
+                <h3 className="mb-2 text-lg font-semibold">Tags:</h3>
                 <div className="flex flex-wrap gap-2">
                   {novel.tags.map(({ tag }) => (
-                    <span key={tag.id} className="bg-green-600 px-3 py-1 rounded-full text-sm">
+                    <span
+                      key={tag.id}
+                      className="rounded-full bg-green-600 px-3 py-1 text-sm"
+                    >
                       {tag.name}
                     </span>
                   ))}
@@ -159,17 +167,19 @@ export default function NovelDetailPage() {
 
         {/* Chapters List */}
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">Chapters</h2>
-          <div className="bg-gray-800 rounded-lg shadow-lg">
+          <h2 className="mb-4 text-2xl font-bold">Chapters</h2>
+          <div className="rounded-lg bg-gray-800 shadow-lg">
             {novel.chapters.map((chapter) => (
-              <Link 
-                href={`/novels/${novel.id}/chapters/${chapter.id}`} 
+              <Link
+                href={`/novels/${novel.id}/chapters/${chapter.id}`}
                 key={chapter.id}
               >
-                <div className="border-b border-gray-700 p-4 hover:bg-gray-700 transition duration-200">
-                  <div className="flex justify-between items-center">
+                <div className="border-b border-gray-700 p-4 transition duration-200 hover:bg-gray-700">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-gray-400">Chapter {chapter.chapter_number}: </span>
+                      <span className="text-gray-400">
+                        Chapter {chapter.chapter_number}:{' '}
+                      </span>
                       <span className="text-blue-400">{chapter.title}</span>
                     </div>
                     <div className="text-sm text-gray-500">
@@ -184,4 +194,4 @@ export default function NovelDetailPage() {
       </div>
     </div>
   );
-} 
+}

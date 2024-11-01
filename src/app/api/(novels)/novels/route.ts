@@ -13,15 +13,21 @@ export async function POST(request: Request) {
       type = ContentType.NOVEL,
       search,
       page = 1,
-      limit = 10
+      limit = 10,
     } = await request.json();
 
     // Validate sort field
-    const validSortFields = ['created_at', 'updated_at', 'title', 'rating', 'views'];
+    const validSortFields = [
+      'created_at',
+      'updated_at',
+      'title',
+      'rating',
+      'views',
+    ];
     if (!validSortFields.includes(sortBy)) {
       return NextResponse.json(
         { error: 'Invalid sort field' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,27 +38,27 @@ export async function POST(request: Request) {
       ...(search && {
         OR: [
           { title: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } }
-        ]
+          { description: { contains: search, mode: 'insensitive' } },
+        ],
       }),
       ...(genres.length > 0 && {
         genres: {
           some: {
             genre_id: {
-              in: genres
-            }
-          }
-        }
+              in: genres,
+            },
+          },
+        },
       }),
       ...(tags.length > 0 && {
         tags: {
           some: {
             tag_id: {
-              in: tags
-            }
-          }
-        }
-      })
+              in: tags,
+            },
+          },
+        },
+      }),
     };
 
     // Get total count for pagination
@@ -64,27 +70,27 @@ export async function POST(request: Request) {
       include: {
         genres: {
           include: {
-            genre: true
-          }
+            genre: true,
+          },
         },
         tags: {
           include: {
-            tag: true
-          }
+            tag: true,
+          },
         },
         author: {
           select: {
             id: true,
             username: true,
-            avatar_url: true
-          }
-        }
+            avatar_url: true,
+          },
+        },
       },
       orderBy: {
-        [sortBy]: order
+        [sortBy]: order,
       },
       skip: (page - 1) * limit,
-      take: limit
+      take: limit,
     });
 
     return NextResponse.json({
@@ -93,15 +99,14 @@ export async function POST(request: Request) {
         total,
         pages: Math.ceil(total / limit),
         currentPage: page,
-        limit
-      }
+        limit,
+      },
     });
-
   } catch (error) {
-    console.error(error);   
+    console.error(error);
     return NextResponse.json(
       { error: 'Failed to fetch novels' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

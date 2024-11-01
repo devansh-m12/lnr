@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
     //check if user exists
     const user = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (!user) {
@@ -17,8 +17,10 @@ export async function POST(req: Request) {
     }
 
     // Generate OTP
-    const otp = Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
-    
+    const otp = Math.floor(Math.random() * 0xffffff)
+      .toString(16)
+      .padStart(6, '0');
+
     // Create or update verification token
     await prisma.verificationToken.upsert({
       where: {
@@ -42,17 +44,17 @@ export async function POST(req: Request) {
     await sendEmail(
       email,
       'Verify Your Email',
-      getVerificationEmailTemplate(otp)
+      getVerificationEmailTemplate(otp),
     );
 
-    return NextResponse.json({ 
-      message: 'Verification code sent successfully' 
+    return NextResponse.json({
+      message: 'Verification code sent successfully',
     });
   } catch (error) {
     console.error('Error sending verification code:', error);
     return NextResponse.json(
       { error: 'Failed to send verification code' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: "us2.smtp.mailhostbox.com",
+  host: 'us2.smtp.mailhostbox.com',
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -22,5 +22,5 @@ export async function sendEmail(to: string, subject: string, html: string) {
     html,
   });
 
-  console.log("Message sent: %s", info.messageId);
+  console.log('Message sent: %s', info.messageId);
 }

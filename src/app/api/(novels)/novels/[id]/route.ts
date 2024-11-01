@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const novel = await prisma.content.findUnique({
@@ -54,10 +54,7 @@ export async function GET(
     });
 
     if (!novel) {
-      return NextResponse.json(
-        { error: 'Novel not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
     }
 
     return NextResponse.json(novel);
@@ -65,7 +62,7 @@ export async function GET(
     console.error('Error fetching novel:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
-} 
+}

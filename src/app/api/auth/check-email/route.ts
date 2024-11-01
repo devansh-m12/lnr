@@ -16,14 +16,14 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json(
         { error: 'Email not registered' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (!user.emailVerified) {
       return NextResponse.json(
         { error: 'Email not verified' },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
-} 
+}

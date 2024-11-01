@@ -65,16 +65,16 @@ export default function NovelsPage() {
   const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
 
   const addFilter = (filterType: string) => {
-    setActiveFilters(prev => new Set([...prev, filterType]));
+    setActiveFilters((prev) => new Set([...prev, filterType]));
   };
 
   const removeFilter = (filterType: string) => {
-    setActiveFilters(prev => {
+    setActiveFilters((prev) => {
       const newFilters = new Set(prev);
       newFilters.delete(filterType);
       return newFilters;
     });
-    
+
     switch (filterType) {
       case 'sort':
         setSortBy('created_at');
@@ -158,18 +158,18 @@ export default function NovelsPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <div className="container mx-auto p-4">
-        <div className="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-6 rounded-lg bg-gray-800 p-6 shadow-lg">
+          <div className="mb-4 flex items-center justify-between">
             <input
               type="text"
               placeholder="Search novels..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="p-2 border rounded bg-gray-700 text-white border-gray-600 flex-grow mr-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mr-4 flex-grow rounded border border-gray-600 bg-gray-700 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-300"
+              className="flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white transition duration-300 hover:bg-blue-700"
             >
               <Filter size={20} />
               {isFilterOpen ? 'Close Filters' : 'Open Filters'}
@@ -181,7 +181,7 @@ export default function NovelsPage() {
               {!activeFilters.has('sort') && (
                 <button
                   onClick={() => addFilter('sort')}
-                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition duration-300"
+                  className="flex items-center gap-2 text-blue-400 transition duration-300 hover:text-blue-300"
                 >
                   <Plus size={20} /> Add Sort Filter
                 </button>
@@ -190,7 +190,7 @@ export default function NovelsPage() {
               {!activeFilters.has('genres') && (
                 <button
                   onClick={() => addFilter('genres')}
-                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition duration-300"
+                  className="flex items-center gap-2 text-blue-400 transition duration-300 hover:text-blue-300"
                 >
                   <Plus size={20} /> Add Genres Filter
                 </button>
@@ -199,7 +199,7 @@ export default function NovelsPage() {
               {!activeFilters.has('tags') && (
                 <button
                   onClick={() => addFilter('tags')}
-                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition duration-300"
+                  className="flex items-center gap-2 text-blue-400 transition duration-300 hover:text-blue-300"
                 >
                   <Plus size={20} /> Add Tags Filter
                 </button>
@@ -208,7 +208,7 @@ export default function NovelsPage() {
               {!activeFilters.has('status') && (
                 <button
                   onClick={() => addFilter('status')}
-                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition duration-300"
+                  className="flex items-center gap-2 text-blue-400 transition duration-300 hover:text-blue-300"
                 >
                   <Plus size={20} /> Add Status Filter
                 </button>
@@ -216,14 +216,14 @@ export default function NovelsPage() {
             </div>
           )}
 
-          <div className="space-y-4 mt-4">
+          <div className="mt-4 space-y-4">
             {activeFilters.has('sort') && (
-              <div className="flex items-center gap-4 bg-gray-700 p-3 rounded">
+              <div className="flex items-center gap-4 rounded bg-gray-700 p-3">
                 <div className="flex-grow">
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-gray-600 text-white p-2 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="mr-2 rounded bg-gray-600 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="created_at">Created Date</option>
                     <option value="updated_at">Updated Date</option>
@@ -234,7 +234,7 @@ export default function NovelsPage() {
                   <select
                     value={order}
                     onChange={(e) => setOrder(e.target.value)}
-                    className="bg-gray-600 text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="rounded bg-gray-600 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="desc">Descending</option>
                     <option value="asc">Ascending</option>
@@ -242,7 +242,7 @@ export default function NovelsPage() {
                 </div>
                 <button
                   onClick={() => removeFilter('sort')}
-                  className="text-gray-400 hover:text-red-500 transition duration-300"
+                  className="text-gray-400 transition duration-300 hover:text-red-500"
                 >
                   <XCircle size={20} />
                 </button>
@@ -250,22 +250,31 @@ export default function NovelsPage() {
             )}
 
             {activeFilters.has('genres') && (
-              <div className="flex items-center gap-4 bg-gray-700 p-3 rounded">
+              <div className="flex items-center gap-4 rounded bg-gray-700 p-3">
                 <div className="flex-grow">
                   <select
                     multiple
                     value={selectedGenres}
-                    onChange={(e) => setSelectedGenres(Array.from(e.target.selectedOptions, option => option.value))}
-                    className="bg-gray-600 text-white p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setSelectedGenres(
+                        Array.from(
+                          e.target.selectedOptions,
+                          (option) => option.value,
+                        ),
+                      )
+                    }
+                    className="w-full rounded bg-gray-600 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    {availableGenres.map(genre => (
-                      <option key={genre.id} value={genre.id}>{genre.name}</option>
+                    {availableGenres.map((genre) => (
+                      <option key={genre.id} value={genre.id}>
+                        {genre.name}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <button
                   onClick={() => removeFilter('genres')}
-                  className="text-gray-400 hover:text-red-500 transition duration-300"
+                  className="text-gray-400 transition duration-300 hover:text-red-500"
                 >
                   <XCircle size={20} />
                 </button>
@@ -273,22 +282,31 @@ export default function NovelsPage() {
             )}
 
             {activeFilters.has('tags') && (
-              <div className="flex items-center gap-4 bg-gray-700 p-3 rounded">
+              <div className="flex items-center gap-4 rounded bg-gray-700 p-3">
                 <div className="flex-grow">
                   <select
                     multiple
                     value={selectedTags}
-                    onChange={(e) => setSelectedTags(Array.from(e.target.selectedOptions, option => option.value))}
-                    className="bg-gray-600 text-white p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setSelectedTags(
+                        Array.from(
+                          e.target.selectedOptions,
+                          (option) => option.value,
+                        ),
+                      )
+                    }
+                    className="w-full rounded bg-gray-600 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    {availableTags.map(tag => (
-                      <option key={tag.id} value={tag.id}>{tag.name}</option>
+                    {availableTags.map((tag) => (
+                      <option key={tag.id} value={tag.id}>
+                        {tag.name}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <button
                   onClick={() => removeFilter('tags')}
-                  className="text-gray-400 hover:text-red-500 transition duration-300"
+                  className="text-gray-400 transition duration-300 hover:text-red-500"
                 >
                   <XCircle size={20} />
                 </button>
@@ -296,12 +314,14 @@ export default function NovelsPage() {
             )}
 
             {activeFilters.has('status') && (
-              <div className="flex items-center gap-4 bg-gray-700 p-3 rounded">
+              <div className="flex items-center gap-4 rounded bg-gray-700 p-3">
                 <div className="flex-grow">
                   <select
                     value={status || ''}
-                    onChange={(e) => setStatus(e.target.value as ContentStatus || null)}
-                    className="bg-gray-600 text-white p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setStatus((e.target.value as ContentStatus) || null)
+                    }
+                    className="w-full rounded bg-gray-600 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Any Status</option>
                     <option value={ContentStatus.ONGOING}>Ongoing</option>
@@ -312,7 +332,7 @@ export default function NovelsPage() {
                 </div>
                 <button
                   onClick={() => removeFilter('status')}
-                  className="text-gray-400 hover:text-red-500 transition duration-300"
+                  className="text-gray-400 transition duration-300 hover:text-red-500"
                 >
                   <XCircle size={20} />
                 </button>
@@ -321,25 +341,34 @@ export default function NovelsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {novels.map((novel) => (
             <Link href={`/novels/${novel.id}`} key={novel.id}>
-              <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer">
-                <h2 className="text-2xl font-bold mb-2 text-blue-400">{novel.title}</h2>
-                <p className="text-gray-400 mb-4">{novel.description}</p>
-                <p className="text-gray-300 mb-2">
-                  By: <span className="font-semibold">{novel.author.username}</span>
+              <div className="cursor-pointer rounded-lg bg-gray-800 p-6 shadow-lg transition duration-300 hover:shadow-xl">
+                <h2 className="mb-2 text-2xl font-bold text-blue-400">
+                  {novel.title}
+                </h2>
+                <p className="mb-4 text-gray-400">{novel.description}</p>
+                <p className="mb-2 text-gray-300">
+                  By:{' '}
+                  <span className="font-semibold">{novel.author.username}</span>
                 </p>
                 <div className="mb-2">
                   {novel.genres.map(({ genre }) => (
-                    <span key={genre.id} className="inline-block mr-2 mb-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">
+                    <span
+                      key={genre.id}
+                      className="mb-2 mr-2 inline-block rounded bg-blue-600 px-2 py-1 text-sm text-white"
+                    >
                       {genre.name}
                     </span>
                   ))}
                 </div>
                 <div>
                   {novel.tags.map(({ tag }) => (
-                    <span key={tag.id} className="inline-block mr-2 mb-2 bg-green-600 text-white px-2 py-1 rounded text-sm">
+                    <span
+                      key={tag.id}
+                      className="mb-2 mr-2 inline-block rounded bg-green-600 px-2 py-1 text-sm text-white"
+                    >
                       {tag.name}
                     </span>
                   ))}
@@ -350,11 +379,11 @@ export default function NovelsPage() {
         </div>
 
         {pagination && (
-          <div className="mt-8 flex justify-center items-center">
+          <div className="mt-8 flex items-center justify-center">
             <button
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
-              className="px-4 py-2 bg-blue-600 text-white rounded mr-4 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 transition duration-300"
+              className="mr-4 rounded bg-blue-600 px-4 py-2 text-white transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <ChevronLeft size={20} />
             </button>
@@ -364,7 +393,7 @@ export default function NovelsPage() {
             <button
               onClick={() => setPage(page + 1)}
               disabled={page === pagination.pages}
-              className="px-4 py-2 bg-blue-600 text-white rounded ml-4 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 transition duration-300"
+              className="ml-4 rounded bg-blue-600 px-4 py-2 text-white transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <ChevronRight size={20} />
             </button>

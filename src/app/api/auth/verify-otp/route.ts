@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import  prisma  from '@/db';
+import prisma from '@/db';
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     if (!verificationToken) {
       return NextResponse.json(
         { error: 'Invalid or expired verification code' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -39,14 +39,14 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ 
-      message: 'Email verified successfully' 
+    return NextResponse.json({
+      message: 'Email verified successfully',
     });
   } catch (error) {
     console.error('Error verifying OTP:', error);
     return NextResponse.json(
       { error: 'Failed to verify email' },
-      { status: 500 }
+      { status: 500 },
     );
   }
-} 
+}

@@ -8,8 +8,8 @@ export default function HomePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-gray-900"></div>
       </div>
     );
   }
@@ -20,9 +20,11 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Welcome, {session.user?.name}!</h1>
-        <div className="bg-white rounded-lg shadow p-6">
+      <div className="mx-auto max-w-4xl">
+        <h1 className="mb-6 text-3xl font-bold">
+          Welcome, {session.user?.name}!
+        </h1>
+        <div className="rounded-lg bg-white p-6 shadow">
           <p className="text-gray-600">
             You are successfully logged in. This is your home page.
           </p>
