@@ -5,11 +5,14 @@ import { ContentStatus, ContentType } from '@prisma/client';
 import { XCircle, Plus, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-interface Novel {
+interface Content {
   id: string;
   title: string;
   description: string;
+  type: ContentType;
   status: ContentStatus;
+  rating: number;
+  views: number;
   author: {
     id: string;
     username: string;
@@ -48,14 +51,15 @@ interface Tag {
   description: string;
 }
 
-export default function NovelsPage() {
-  const [novels, setNovels] = useState<Novel[]>([]);
+export default function ContentPage() {
+  const [content, setContent] = useState<Content[]>([]);
   const [pagination, setPagination] = useState<PaginationData>();
   const [sortBy, setSortBy] = useState('created_at');
   const [order, setOrder] = useState('desc');
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [status, setStatus] = useState<ContentStatus | null>(null);
+  const [type, setType] = useState<ContentType | null>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -65,7 +69,7 @@ export default function NovelsPage() {
   const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
 
   const addFilter = (filterType: string) => {
-    setActiveFilters((prev) => new Set([...prev, filterType]));
+    setActiveFilters((prev) => new Set(Array.from(prev).concat(filterType)));
   };
 
   const removeFilter = (filterType: string) => {
@@ -88,6 +92,9 @@ export default function NovelsPage() {
         break;
       case 'status':
         setStatus(null);
+        break;
+      case 'type':
+        setType(null);
         break;
     }
   };
@@ -114,9 +121,9 @@ export default function NovelsPage() {
     }
   };
 
-  const fetchNovels = async () => {
+  const fetchContent = async () => {
     try {
-      const response = await fetch('/api/novels', {
+      const response = await fetch('/api/content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +134,7 @@ export default function NovelsPage() {
           genres: selectedGenres,
           tags: selectedTags,
           status,
-          type: ContentType.NOVEL,
+          type,
           search,
           page,
           limit,
@@ -135,14 +142,14 @@ export default function NovelsPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch novels');
+        throw new Error('Failed to fetch content');
       }
 
       const data = await response.json();
-      setNovels(data.novels);
+      setContent(data.content);
       setPagination(data.pagination);
     } catch (error) {
-      console.error('Error fetching novels:', error);
+      console.error('Error fetching content:', error);
     }
   };
 
@@ -152,8 +159,8 @@ export default function NovelsPage() {
   }, []);
 
   useEffect(() => {
-    fetchNovels();
-  }, [sortBy, order, selectedGenres, selectedTags, status, search, page]);
+    fetchContent();
+  }, [sortBy, order, selectedGenres, selectedTags, status, type, search, page]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -162,7 +169,7 @@ export default function NovelsPage() {
           <div className="mb-4 flex items-center justify-between">
             <input
               type="text"
-              placeholder="Search novels..."
+              placeholder="Search content..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="mr-4 flex-grow rounded border border-gray-600 bg-gray-700 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -184,6 +191,15 @@ export default function NovelsPage() {
                   className="flex items-center gap-2 text-blue-400 transition duration-300 hover:text-blue-300"
                 >
                   <Plus size={20} /> Add Sort Filter
+                </button>
+              )}
+
+              {!activeFilters.has('type') && (
+                <button
+                  onClick={() => addFilter('type')}
+                  className="flex items-center gap-2 text-blue-400 transition duration-300 hover:text-blue-300"
+                >
+                  <Plus size={20} /> Add Type Filter
                 </button>
               )}
 
@@ -242,6 +258,31 @@ export default function NovelsPage() {
                 </div>
                 <button
                   onClick={() => removeFilter('sort')}
+                  className="text-gray-400 transition duration-300 hover:text-red-500"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+            )}
+
+            {activeFilters.has('type') && (
+              <div className="flex items-center gap-4 rounded bg-gray-700 p-3">
+                <div className="flex-grow">
+                  <select
+                    value={type || ''}
+                    onChange={(e) =>
+                      setType((e.target.value as ContentType) || null)
+                    }
+                    className="w-full rounded bg-gray-600 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Any Type</option>
+                    <option value={ContentType.NOVEL}>Novel</option>
+                    <option value={ContentType.MANGA}>Manga</option>
+                    <option value={ContentType.MANHWA}>Manhwa</option>
+                  </select>
+                </div>
+                <button
+                  onClick={() => removeFilter('type')}
                   className="text-gray-400 transition duration-300 hover:text-red-500"
                 >
                   <XCircle size={20} />
@@ -327,7 +368,6 @@ export default function NovelsPage() {
                     <option value={ContentStatus.ONGOING}>Ongoing</option>
                     <option value={ContentStatus.COMPLETED}>Completed</option>
                     <option value={ContentStatus.HIATUS}>Hiatus</option>
-                    <option value={ContentStatus.DROPPED}>Dropped</option>
                   </select>
                 </div>
                 <button
@@ -342,19 +382,35 @@ export default function NovelsPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {novels.map((novel) => (
-            <Link href={`/novels/${novel.id}`} key={novel.id}>
+          {content.map((item) => (
+            <Link href={`/content/${item.id}`} key={item.id}>
               <div className="cursor-pointer rounded-lg bg-gray-800 p-6 shadow-lg transition duration-300 hover:shadow-xl">
                 <h2 className="mb-2 text-2xl font-bold text-blue-400">
-                  {novel.title}
+                  {item.title}
                 </h2>
-                <p className="mb-4 text-gray-400">{novel.description}</p>
-                <p className="mb-2 text-gray-300">
-                  By:{' '}
-                  <span className="font-semibold">{novel.author.username}</span>
-                </p>
+                <p className="mb-4 text-gray-400">{item.description}</p>
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-gray-300">
+                    By:{' '}
+                    <span className="font-semibold">{item.author.username}</span>
+                  </p>
+                  <div className="flex gap-4">
+                    <span className="text-yellow-400">
+                      Rating: {item.rating.toFixed(1)}
+                    </span>
+                    <span className="text-green-400">Views: {item.views}</span>
+                  </div>
+                </div>
                 <div className="mb-2">
-                  {novel.genres.map(({ genre }) => (
+                  <span className="mb-2 mr-2 inline-block rounded bg-purple-600 px-2 py-1 text-sm text-white">
+                    {item.type}
+                  </span>
+                  <span className="mb-2 mr-2 inline-block rounded bg-orange-600 px-2 py-1 text-sm text-white">
+                    {item.status}
+                  </span>
+                </div>
+                <div className="mb-2">
+                  {item.genres.map(({ genre }) => (
                     <span
                       key={genre.id}
                       className="mb-2 mr-2 inline-block rounded bg-blue-600 px-2 py-1 text-sm text-white"
@@ -364,7 +420,7 @@ export default function NovelsPage() {
                   ))}
                 </div>
                 <div>
-                  {novel.tags.map(({ tag }) => (
+                  {item.tags.map(({ tag }) => (
                     <span
                       key={tag.id}
                       className="mb-2 mr-2 inline-block rounded bg-green-600 px-2 py-1 text-sm text-white"

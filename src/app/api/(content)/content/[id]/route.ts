@@ -1,15 +1,15 @@
 import prisma from '@/db';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } },
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const novel = await prisma.content.findUnique({
+    const { id } = await params;
+    const content = await prisma.content.findUnique({
       where: {
-        id: params.id,
-        type: 'NOVEL',
+        id: id,
       },
       include: {
         author: {
@@ -53,16 +53,19 @@ export async function GET(
       },
     });
 
-    if (!novel) {
-      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
+    if (!content) {
+      return NextResponse.json(
+        { error: 'Content not found' },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(novel);
+    return NextResponse.json(content);
   } catch (error) {
-    console.error('Error fetching novel:', error);
+    console.error('Error fetching content:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

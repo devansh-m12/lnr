@@ -1,22 +1,23 @@
 'use client';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Carousel, Card } from '@/components/ui/apple-cards-carousel';
 import { Novel } from '@/types/novel';
+import { ContentType } from '@prisma/client';
 
 interface ContentProps {
-  novel: Novel;
+  content: Novel;
 }
 
-const Content = ({ novel }: ContentProps) => {
+const Content = ({ content }: ContentProps) => {
   return (
     <div className="mb-4 rounded-3xl bg-[#F5F5F7] p-8 dark:bg-neutral-800 md:p-14">
       <div className="flex flex-col items-center gap-8 md:flex-row">
         {/* Image Section */}
         <div className="relative aspect-[1/3] min-h-[50px] w-full md:w-1/3">
           <Image
-            src={novel.cover_image_url}
-            alt={`Cover image for ${novel.title}`}
+            src={content.cover_image_url}
+            alt={`Cover image for ${content.title}`}
             fill
             className="rounded-lg object-cover"
             priority
@@ -26,19 +27,19 @@ const Content = ({ novel }: ContentProps) => {
         {/* Content Section */}
         <div className="space-y-4 md:w-2/3">
           <h3 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200 md:text-3xl">
-            {novel.title}
+            {content.title}
           </h3>
 
           <p className="text-base text-neutral-600 dark:text-neutral-400 md:text-lg">
-            {novel.description}
+            {content.description}
           </p>
 
           <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
             <span className="rounded bg-neutral-200 px-2 py-1 dark:bg-neutral-700">
-              {novel.status}
+              {content.status}
             </span>
-            <span>Views: {novel.views}</span>
-            <span>Rating: {novel.rating}/5</span>
+            <span>Views: {content.views}</span>
+            <span>Rating: {content.rating}/5</span>
           </div>
         </div>
       </div>
@@ -46,12 +47,38 @@ const Content = ({ novel }: ContentProps) => {
   );
 };
 
-export function LatestRelease({ novels }: { novels: Novel[] }) {
-  const cards = novels.map((novel) => ({
-    category: novel.type,
-    title: novel.title,
-    src: novel.cover_image_url,
-    content: <Content novel={novel} />,
+interface LatestReleaseProps {
+  type?: ContentType;
+}
+
+export function LatestRelease({ type }: LatestReleaseProps) {
+  const [content, setContent] = useState<Novel[]>([]);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      const response = await fetch('/api/content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sortBy: 'created_at',
+          order: 'desc',
+          type: type,
+          limit: 10
+        })
+      });
+      const data = await response.json();
+      setContent(data.content);
+    };
+    fetchContent();
+  }, [type]);
+
+  const cards = content?.map((item) => ({
+    category: item.type,
+    title: item.title,
+    src: item.cover_image_url,
+    content: <Content content={item} />,
   }));
 
   const carouselCards = cards.map((card, index) => (

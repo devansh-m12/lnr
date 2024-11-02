@@ -10,7 +10,7 @@ export async function POST(request: Request) {
       genres = [],
       tags = [],
       status,
-      type = ContentType.NOVEL,
+      type,
       search,
       page = 1,
       limit = 10,
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
     // Build where clause
     const where = {
-      type,
+      ...(type && { type }),
       ...(status && { status }),
       ...(search && {
         OR: [
@@ -64,8 +64,8 @@ export async function POST(request: Request) {
     // Get total count for pagination
     const total = await prisma.content.count({ where });
 
-    // Get paginated and sorted novels with relations
-    const novels = await prisma.content.findMany({
+    // Get paginated and sorted content with relations
+    const content = await prisma.content.findMany({
       where,
       include: {
         genres: {
@@ -94,7 +94,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      novels,
+      content,
       pagination: {
         total,
         pages: Math.ceil(total / limit),
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: 'Failed to fetch novels' },
+      { error: 'Failed to fetch content' },
       { status: 500 },
     );
   }
