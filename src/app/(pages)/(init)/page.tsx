@@ -4,11 +4,10 @@ import { LatestRelease } from './latestRelease';
 import { Novel } from '@/types/novel';
 
 export default function Page() {
-
   return (
     <main className="container mx-auto">
       <div className="h-[33vh] bg-black">
-        <LatestRelease/>
+        <LatestRelease />
       </div>
     </main>
   );

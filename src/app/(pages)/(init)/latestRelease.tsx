@@ -65,7 +65,7 @@ export function LatestRelease({ type }: LatestReleaseProps) {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         const response = await fetch('/api/content', {
           method: 'POST',
           headers: {
@@ -75,8 +75,8 @@ export function LatestRelease({ type }: LatestReleaseProps) {
             sortBy: 'created_at',
             order: 'desc',
             type: type,
-            limit: 10
-          })
+            limit: 10,
+          }),
         });
 
         if (!response.ok) {
@@ -86,7 +86,9 @@ export function LatestRelease({ type }: LatestReleaseProps) {
         const data = await response.json();
         setContent(data.content);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch content');
+        setError(
+          err instanceof Error ? err.message : 'Failed to fetch content',
+        );
       } finally {
         setIsLoading(false);
       }
@@ -101,7 +103,7 @@ export function LatestRelease({ type }: LatestReleaseProps) {
         <h2 className="mb-8 font-sans text-xl font-bold text-neutral-800 dark:text-neutral-200 md:text-5xl">
           Latest Releases
         </h2>
-        
+
         {isLoading && (
           <div className="flex justify-center py-8">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-300 border-t-neutral-800"></div>
@@ -111,7 +113,7 @@ export function LatestRelease({ type }: LatestReleaseProps) {
         {error && (
           <div className="rounded-lg bg-red-50 p-4 text-red-800 dark:bg-red-900/50 dark:text-red-200">
             <p>{error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="mt-2 text-sm underline hover:no-underline"
             >

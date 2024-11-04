@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const { id } = await params;
@@ -54,10 +54,7 @@ export async function GET(
     });
 
     if (!content) {
-      return NextResponse.json(
-        { error: 'Content not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Content not found' }, { status: 404 });
     }
 
     return NextResponse.json(content);
@@ -65,7 +62,7 @@ export async function GET(
     console.error('Error fetching content:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

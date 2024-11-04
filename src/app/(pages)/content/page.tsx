@@ -392,7 +392,9 @@ export default function ContentPage() {
                 <div className="mb-4 flex items-center justify-between">
                   <p className="text-gray-300">
                     By:{' '}
-                    <span className="font-semibold">{item.author.username}</span>
+                    <span className="font-semibold">
+                      {item.author.username}
+                    </span>
                   </p>
                   <div className="flex gap-4">
                     <span className="text-yellow-400">
