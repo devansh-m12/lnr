@@ -3,116 +3,182 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Sidebar, SidebarBody, SidebarLink } from '@/components/ui/sidebar';
+import { IconHome, IconUser, IconBook, IconBookmarks, IconLogout, IconLogin, IconUserPlus, IconInfoCircle, IconPlus } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { SessionWithAvatar } from '@/types/session';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export default function Header() {
   const { data: session } = useSession();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const sessionWithAvatar = session as SessionWithAvatar;
+  const [open, setOpen] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  
+  const navItems = [
+    { 
+      label: 'Home',
+      href: '/',
+      icon: <IconHome className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+    },
+    {
+      label: 'Library',
+      href: '/library',
+      icon: <IconBook className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+    },
+    {
+      label: 'Bookmarks',
+      href: '/bookmarks',
+      icon: <IconBookmarks className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+    },
+    {
+      label: 'Add Content',
+      href: '/add-content',
+      icon: <IconPlus className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+    },
+    {
+      label: 'About',
+      href: '/about',
+      icon: <IconInfoCircle className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+    }
+  ];
 
-  const [navItems] = useState([
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-  ]);
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/' });
+    setShowLogoutDialog(false);
+  };
 
   return (
-    <header className="bg-transparent">
-      <div className="px-7 py-7">
-        <div className="flex h-14 items-center justify-between">
-          {/* Left side - Logo/Name */}
-          <div className="flex items-center space-x-6">
-            <Link
-              href="/"
-              className="flex h-10 items-center bg-white/10 px-4 py-2 backdrop-blur-md"
-            >
-              <svg
-                className="h-6 w-6 text-indigo-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              <span className="ml-2 text-xl font-bold text-foreground">
-                AppName
-              </span>
-            </Link>
-            <nav>
-              <ul className="flex space-x-4">
-                {navItems.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="flex h-10 items-center bg-white/10 px-3 py-2 backdrop-blur-md"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-
-          {/* Right side - Auth buttons/dropdown */}
-          <div className="relative">
-            {session ? (
-              <div>
-                <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center space-x-2 rounded-lg bg-white/10 px-4 py-2 text-foreground backdrop-blur-md hover:text-foreground/80 focus:outline-none"
-                >
-                  <span>{session.user?.name || session.user?.email}</span>
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+    <>
+      <div className="h-screen">
+        <Sidebar open={open} setOpen={setOpen}>
+          <SidebarBody className="justify-between gap-10">
+            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+              {open ? (
+                <Link href="/" className="flex items-center space-x-2">
+                  <div className="h-6 w-6 bg-indigo-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-xl font-bold text-foreground"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
+                    MangaReader
+                  </motion.span>
+                </Link>
+              ) : (
+                <Link href="/" className="flex items-center">
+                  <div className="h-6 w-6 bg-indigo-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+                </Link>
+              )}
 
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-lg bg-white/10 ring-1 ring-white/20 backdrop-blur-md">
-                    <div className="py-1">
-                      <button
-                        onClick={() => signOut()}
-                        className="block w-full px-4 py-2 text-left text-sm text-foreground hover:bg-white/20"
+              <div className="mt-8 flex flex-col gap-2">
+                {navItems.map((item) => (
+                  <SidebarLink key={item.label} link={item} />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              {session ? (
+                <div className="space-y-2">
+                  <SidebarLink
+                    link={{
+                      label: sessionWithAvatar.user?.name || sessionWithAvatar.user?.email || '',
+                      href: '/profile',
+                      icon: sessionWithAvatar.user?.avatar_url ? (
+                        <div
+                          style={{
+                            width: 28,
+                            height: 28,
+                            backgroundImage: `url(${sessionWithAvatar.user.avatar_url})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            borderRadius: '50%',
+                            flexShrink: 0
+                          }}
+                          role="img"
+                          aria-label="Avatar"
+                        />
+                      ) : (
+                        <IconUser className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+                      ),
+                    }}
+                  />
+                  <button
+                    onClick={() => setShowLogoutDialog(true)}
+                    className="w-full"
+                  >
+                    <SidebarLink
+                      link={{
+                        label: 'Logout',
+                        href: '#',
+                        icon: <IconLogout className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+                      }}
+                    />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 p-2">
+                  {open ? (
+                    <>
+                      <Link
+                        href="/auth/login"
+                        className="flex items-center justify-center gap-2 w-full rounded-lg bg-white/10 px-4 py-2 text-center text-foreground backdrop-blur-md hover:text-foreground/80"
                       >
-                        Sign out
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex space-x-4">
-                <Link
-                  href="/auth/login"
-                  className="rounded-lg bg-white/10 px-4 py-2 text-foreground backdrop-blur-md hover:text-foreground/80"
-                >
-                  Sign in
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="rounded-lg bg-indigo-600 px-4 py-2 text-white backdrop-blur-md hover:bg-indigo-700"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
+                        <IconLogin className="h-5 w-5" />
+                        Login
+                      </Link>
+                      <Link
+                        href="/auth/register" 
+                        className="flex items-center justify-center gap-2 w-full rounded-lg bg-indigo-600 px-4 py-2 text-center text-white backdrop-blur-md hover:bg-indigo-700"
+                      >
+                        <IconUserPlus className="h-5 w-5" />
+                        Register
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/auth/login"
+                        className="text-foreground hover:text-foreground/80 mb-2"
+                      >
+                        <IconLogin className="h-5 w-5" />
+                      </Link>
+                      <Link
+                        href="/auth/register"
+                        className="text-indigo-600 hover:text-indigo-700"
+                      >
+                        <IconUserPlus className="h-5 w-5" />
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </SidebarBody>
+        </Sidebar>
       </div>
-    </header>
+
+      <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Logout</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to logout from your account?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLogoutDialog(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleLogout}>
+              Logout
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

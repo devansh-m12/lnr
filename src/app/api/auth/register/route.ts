@@ -31,6 +31,7 @@ export async function POST(req: Request) {
         name,
         username:
           email.split('@')[0] + Math.random().toString(36).substring(2, 8),
+        avatar_url: `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${email.split('@')[0]}`,
       },
     });
 

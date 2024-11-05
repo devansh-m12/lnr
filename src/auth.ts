@@ -42,6 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               id: true,
               name: true,
               emailVerified: true,
+              avatar_url: true,
             },
           });
 
@@ -68,6 +69,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               email: credentials.username,
               token: jwt,
               emailVerified: user.emailVerified,
+              avatar_url: user.avatar_url,
             };
           }
           throw new Error(
@@ -87,10 +89,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
+      if (token.avatar_url) {
+        session.user.avatar_url = token.avatar_url;
+      }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
+      console.log('token', token);
+      console.log('user', user);
+      if (user) {
+        token.avatar_url = user?.avatar_url;
+      }
       return token;
     },
   },
