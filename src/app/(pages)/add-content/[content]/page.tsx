@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 import AddNovel from "./AddNovel";
 import AddManga from "./AddManga";
 
-interface PageProps {
-  params: { content: string };
-}
-
-export default async function AddContentPage({ params }: PageProps) {
+export default async function AddContentPage({ params }: { params: any }) {
   // Convert to uppercase and validate the content type
   const { content } = await params;
   const contentType = content.toUpperCase() as ContentType;
