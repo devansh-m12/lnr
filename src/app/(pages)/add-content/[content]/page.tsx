@@ -1,7 +1,7 @@
-import { ContentType } from "@prisma/client";
-import { notFound } from "next/navigation";
-import AddNovel from "./AddNovel";
-import AddManga from "./AddManga";
+import { ContentType } from '@prisma/client';
+import { notFound } from 'next/navigation';
+import AddNovel from './AddNovel';
+import AddManga from './AddManga';
 
 export default async function AddContentPage({ params }: { params: any }) {
   // Convert to uppercase and validate the content type

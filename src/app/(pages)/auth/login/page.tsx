@@ -5,11 +5,18 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginInput } from "@/validations/auth";
-import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginInput } from '@/validations/auth';
+import { useToast } from '@/hooks/use-toast';
 
 function LoginForm() {
   const router = useRouter();
@@ -56,18 +63,19 @@ function LoginForm() {
       }
 
       toast({
-        title: "Success",
-        description: "Successfully signed in! Redirecting...",
-        variant: "default",
+        title: 'Success',
+        description: 'Successfully signed in! Redirecting...',
+        variant: 'default',
       });
 
       router.push('/home');
       router.refresh();
     } catch (err) {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: err instanceof Error ? err.message : 'Something went wrong',
+        variant: 'destructive',
+        title: 'Error',
+        description:
+          err instanceof Error ? err.message : 'Something went wrong',
       });
     } finally {
       setLoading(false);
@@ -75,15 +83,13 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg">
         <div>
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Welcome back
-          </p>
+          <p className="mt-2 text-center text-sm text-gray-600">Welcome back</p>
         </div>
 
         {searchParams.get('registered') && (
@@ -93,14 +99,19 @@ function LoginForm() {
         )}
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="mt-8 space-y-6"
+          >
             <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-700">Email address</FormLabel>
+                    <FormLabel className="text-gray-700">
+                      Email address
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -139,7 +150,7 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 {loading ? (
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -155,7 +166,7 @@ function LoginForm() {
         <div className="text-center text-sm">
           <Link
             href="/auth/register"
-            className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200"
+            className="font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-500"
           >
             Don&apos;t have an account? Register
           </Link>

@@ -5,24 +5,26 @@ export default function LatestRelease() {
     {
       src: '/images/placeholder.jpg',
       title: 'Latest Feature Release',
-      category: 'What\'s New',
+      category: "What's New",
       content: (
         <div className="prose dark:prose-invert">
           <p>
-            Check out our newest features and improvements in this latest release.
-            We've added exciting new capabilities and enhanced performance.
+            Check out our newest features and improvements in this latest
+            release. We've added exciting new capabilities and enhanced
+            performance.
           </p>
         </div>
       ),
     },
     {
-      src: '/images/placeholder2.jpg', 
+      src: '/images/placeholder2.jpg',
       title: 'Performance Improvements',
       category: 'Updates',
       content: (
         <div className="prose dark:prose-invert">
           <p>
-            Major performance optimizations and bug fixes to provide a smoother experience.
+            Major performance optimizations and bug fixes to provide a smoother
+            experience.
           </p>
         </div>
       ),
@@ -34,11 +36,12 @@ export default function LatestRelease() {
       content: (
         <div className="prose dark:prose-invert">
           <p>
-            Get a sneak peek at upcoming features and improvements planned for future releases.
+            Get a sneak peek at upcoming features and improvements planned for
+            future releases.
           </p>
         </div>
       ),
-    }
+    },
   ];
 
   return (

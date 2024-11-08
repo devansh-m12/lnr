@@ -7,7 +7,7 @@ import {
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
+} from '@/components/ui/input-otp';
 
 function VerifyEmailContent() {
   const [otp, setOtp] = useState('');
@@ -81,12 +81,10 @@ function VerifyEmailContent() {
     }
   }, [email]);
 
-  
-
   if (!email) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="bg-white p-8 rounded-xl shadow-lg">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="rounded-xl bg-white p-8 shadow-lg">
           <p className="text-gray-700">Invalid verification link</p>
         </div>
       </div>
@@ -94,8 +92,8 @@ function VerifyEmailContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg">
         <div>
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
             Verify your email
@@ -105,13 +103,13 @@ function VerifyEmailContent() {
             <span className="font-medium text-gray-900">{email}</span>
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleVerify}>
           <div className="flex justify-center">
-            <InputOTP 
-              maxLength={6} 
-              value={otp} 
-              onChange={setOtp} 
+            <InputOTP
+              maxLength={6}
+              value={otp}
+              onChange={setOtp}
               disabled={loading}
               className="gap-2"
             >
@@ -130,7 +128,7 @@ function VerifyEmailContent() {
           </div>
 
           {error && (
-            <div className="text-center text-sm text-red-500 bg-red-50 p-3 rounded-md">
+            <div className="rounded-md bg-red-50 p-3 text-center text-sm text-red-500">
               {error}
             </div>
           )}
@@ -139,7 +137,7 @@ function VerifyEmailContent() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+              className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               {loading && (
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -155,7 +153,7 @@ function VerifyEmailContent() {
               type="button"
               onClick={handleResendCode}
               disabled={loading}
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200"
+              className="text-sm font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-500"
             >
               Resend verification code
             </button>

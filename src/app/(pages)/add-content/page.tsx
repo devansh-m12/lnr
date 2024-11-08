@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { ContentType } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { ContentType } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 
 export default function AddContent() {
   const router = useRouter();
@@ -13,10 +13,10 @@ export default function AddContent() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Add New Content</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Button 
+      <h1 className="mb-6 text-2xl font-bold">Add New Content</h1>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Button
           onClick={() => handleContentTypeSelect(ContentType.NOVEL)}
           className="h-32 text-lg"
           variant="outline"

@@ -4,11 +4,28 @@ import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Sidebar, SidebarBody, SidebarLink } from '@/components/ui/sidebar';
-import { IconHome, IconUser, IconBook, IconBookmarks, IconLogout, IconLogin, IconUserPlus, IconInfoCircle, IconPlus } from '@tabler/icons-react';
+import {
+  IconHome,
+  IconUser,
+  IconBook,
+  IconBookmarks,
+  IconLogout,
+  IconLogin,
+  IconUserPlus,
+  IconInfoCircle,
+  IconPlus,
+} from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { SessionWithAvatar } from '@/types/session';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
 export default function Header() {
@@ -16,33 +33,43 @@ export default function Header() {
   const sessionWithAvatar = session as SessionWithAvatar;
   const [open, setOpen] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  
+
   const navItems = [
-    { 
+    {
       label: 'Home',
       href: '/',
-      icon: <IconHome className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+      icon: (
+        <IconHome className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
     },
     {
       label: 'Library',
       href: '/library',
-      icon: <IconBook className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+      icon: (
+        <IconBook className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
     },
     {
       label: 'Bookmarks',
       href: '/bookmarks',
-      icon: <IconBookmarks className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+      icon: (
+        <IconBookmarks className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
     },
     {
       label: 'Add Content',
       href: '/add-content',
-      icon: <IconPlus className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+      icon: (
+        <IconPlus className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
     },
     {
       label: 'About',
       href: '/about',
-      icon: <IconInfoCircle className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
-    }
+      icon: (
+        <IconInfoCircle className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
   ];
 
   const handleLogout = async () => {
@@ -55,10 +82,10 @@ export default function Header() {
       <div className="h-screen">
         <Sidebar open={open} setOpen={setOpen}>
           <SidebarBody className="justify-between gap-10">
-            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
               {open ? (
                 <Link href="/" className="flex items-center space-x-2">
-                  <div className="h-6 w-6 bg-indigo-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+                  <div className="h-6 w-6 flex-shrink-0 rounded-bl-sm rounded-br-lg rounded-tl-lg rounded-tr-sm bg-indigo-600" />
                   <motion.span
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -69,7 +96,7 @@ export default function Header() {
                 </Link>
               ) : (
                 <Link href="/" className="flex items-center">
-                  <div className="h-6 w-6 bg-indigo-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+                  <div className="h-6 w-6 flex-shrink-0 rounded-bl-sm rounded-br-lg rounded-tl-lg rounded-tr-sm bg-indigo-600" />
                 </Link>
               )}
 
@@ -85,7 +112,10 @@ export default function Header() {
                 <div className="space-y-2">
                   <SidebarLink
                     link={{
-                      label: sessionWithAvatar.user?.name || sessionWithAvatar.user?.email || '',
+                      label:
+                        sessionWithAvatar.user?.name ||
+                        sessionWithAvatar.user?.email ||
+                        '',
                       href: '/profile',
                       icon: sessionWithAvatar.user?.avatar_url ? (
                         <div
@@ -96,13 +126,13 @@ export default function Header() {
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             borderRadius: '50%',
-                            flexShrink: 0
+                            flexShrink: 0,
                           }}
                           role="img"
                           aria-label="Avatar"
                         />
                       ) : (
-                        <IconUser className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+                        <IconUser className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
                       ),
                     }}
                   />
@@ -114,7 +144,9 @@ export default function Header() {
                       link={{
                         label: 'Logout',
                         href: '#',
-                        icon: <IconLogout className="h-5 w-5 text-neutral-700 dark:text-neutral-200 flex-shrink-0" />
+                        icon: (
+                          <IconLogout className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
+                        ),
                       }}
                     />
                   </button>
@@ -125,14 +157,14 @@ export default function Header() {
                     <>
                       <Link
                         href="/auth/login"
-                        className="flex items-center justify-center gap-2 w-full rounded-lg bg-white/10 px-4 py-2 text-center text-foreground backdrop-blur-md hover:text-foreground/80"
+                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-center text-foreground backdrop-blur-md hover:text-foreground/80"
                       >
                         <IconLogin className="h-5 w-5" />
                         Login
                       </Link>
                       <Link
-                        href="/auth/register" 
-                        className="flex items-center justify-center gap-2 w-full rounded-lg bg-indigo-600 px-4 py-2 text-center text-white backdrop-blur-md hover:bg-indigo-700"
+                        href="/auth/register"
+                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-center text-white backdrop-blur-md hover:bg-indigo-700"
                       >
                         <IconUserPlus className="h-5 w-5" />
                         Register
@@ -142,7 +174,7 @@ export default function Header() {
                     <>
                       <Link
                         href="/auth/login"
-                        className="text-foreground hover:text-foreground/80 mb-2"
+                        className="mb-2 text-foreground hover:text-foreground/80"
                       >
                         <IconLogin className="h-5 w-5" />
                       </Link>
@@ -170,7 +202,10 @@ export default function Header() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowLogoutDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowLogoutDialog(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleLogout}>
