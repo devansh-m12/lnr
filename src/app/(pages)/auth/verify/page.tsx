@@ -16,6 +16,7 @@ function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
+  const [firstTime, setFirstTime] = useState(true);
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +77,8 @@ function VerifyEmailContent() {
   };
 
   useEffect(() => {
-    if (email) {
+    if (email && firstTime) {
+      setFirstTime(false);
       handleResendCode();
     }
   }, [email]);

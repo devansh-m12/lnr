@@ -16,6 +16,9 @@ export const registerSchema = z.object({
       message:
         'Password must contain at least one uppercase letter, one lowercase letter, and one number.',
     }),
+  confirmPassword: z.string().min(1, {
+    message: 'Please confirm your password.',
+  }),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

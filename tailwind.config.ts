@@ -1,4 +1,7 @@
 import type { Config } from 'tailwindcss';
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
 
 const config = {
   darkMode: ['class'],
@@ -52,6 +55,98 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // Dark mode specific colors
+        dark: {
+          // Background variations
+          bg: {
+            DEFAULT: '#121212',
+            secondary: '#1E1E1E',
+            tertiary: '#2D2D2D',
+          },
+          // Text variations
+          text: {
+            primary: '#FFFFFF',
+            secondary: '#E0E0E0',
+            tertiary: '#BDBDBD',
+            muted: '#757575',
+          },
+          // Brand colors with dark mode variants
+          brand: {
+            primary: {
+              DEFAULT: '#2563EB',
+              hover: '#1D4ED8',
+              muted: '#1E40AF',
+            },
+            secondary: {
+              DEFAULT: '#4F46E5',
+              hover: '#4338CA',
+              muted: '#3730A3',
+            },
+          },
+          // Accent colors
+          accent: {
+            purple: {
+              DEFAULT: '#8B5CF6',
+              hover: '#7C3AED',
+              muted: '#6D28D9',
+            },
+            blue: {
+              DEFAULT: '#3B82F6',
+              hover: '#2563EB',
+              muted: '#1D4ED8',
+            },
+            green: {
+              DEFAULT: '#10B981',
+              hover: '#059669',
+              muted: '#047857',
+            },
+            red: {
+              DEFAULT: '#EF4444',
+              hover: '#DC2626',
+              muted: '#B91C1C',
+            },
+            yellow: {
+              DEFAULT: '#F59E0B',
+              hover: '#D97706',
+              muted: '#B45309',
+            },
+          },
+          // Surface colors for different elevations
+          surface: {
+            DEFAULT: '#1E1E1E',
+            raised: '#2D2D2D',
+            overlay: '#383838',
+          },
+          // Border colors
+          border: {
+            DEFAULT: '#2D2D2D',
+            hover: '#404040',
+            muted: '#1E1E1E',
+          },
+          // Status colors
+          status: {
+            success: {
+              DEFAULT: '#10B981',
+              hover: '#059669',
+              foreground: '#ECFDF5',
+            },
+            error: {
+              DEFAULT: '#EF4444',
+              hover: '#DC2626',
+              foreground: '#FEF2F2',
+            },
+            warning: {
+              DEFAULT: '#F59E0B',
+              hover: '#D97706',
+              foreground: '#FFFBEB',
+            },
+            info: {
+              DEFAULT: '#3B82F6',
+              hover: '#2563EB',
+              foreground: '#EFF6FF',
+            },
+          },
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -79,7 +174,21 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'),
+    addVariablesForColors,
+  ],
 } satisfies Config;
+
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}
 
 export default config;
