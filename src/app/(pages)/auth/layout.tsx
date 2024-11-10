@@ -10,24 +10,22 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen">
       {/* Left side - Site intro */}
-      <section className="hidden w-1/2 bg-slate-900 lg:block relative overflow-hidden">
-            <div className="h-96 relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
-            <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-        
-            <Boxes />
-            <h1 className={cn("md:text-4xl text-xl text-white relative z-20")}>
-                LNR - Light Novel Reader
-            </h1>
-            <p className="text-center mt-2 text-neutral-300 relative z-20">
-                Your one-stop destination for manga, manhwa and novels
+      <section className="relative hidden w-1/2 overflow-hidden bg-slate-900 lg:block">
+        <div className="relative flex h-96 w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-slate-900">
+          <div className="pointer-events-none absolute inset-0 z-20 h-full w-full bg-slate-900 [mask-image:radial-gradient(transparent,white)]" />
+
+          <Boxes />
+          <h1 className={cn('relative z-20 text-xl text-white md:text-4xl')}>
+            LNR - Light Novel Reader
+          </h1>
+          <p className="relative z-20 mt-2 text-center text-neutral-300">
+            Your one-stop destination for manga, manhwa and novels
           </p>
         </div>
       </section>
 
       {/* Right side - Auth forms */}
-      <section className="w-full lg:w-1/2">
-        {children}
-      </section>
+      <section className="w-full lg:w-1/2">{children}</section>
     </div>
   );
 }

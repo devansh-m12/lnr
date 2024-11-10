@@ -61,7 +61,7 @@ export default function RegisterPage() {
       type: 'password',
       placeholder: '••••••••',
       autoComplete: 'new-password',
-    }
+    },
   ];
 
   return (
@@ -79,7 +79,7 @@ export default function RegisterPage() {
         name: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
       }}
     />
   );

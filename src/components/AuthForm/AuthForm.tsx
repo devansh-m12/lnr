@@ -67,7 +67,8 @@ export default function AuthForm({
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: err instanceof Error ? err.message : 'Something went wrong',
+        description:
+          err instanceof Error ? err.message : 'Something went wrong',
       });
     } finally {
       setLoading(false);
@@ -103,7 +104,9 @@ export default function AuthForm({
                   name={field.name}
                   render={({ field: formField }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-300">{field.label}</FormLabel>
+                      <FormLabel className="text-gray-300">
+                        {field.label}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...formField}
