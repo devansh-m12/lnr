@@ -85,82 +85,95 @@ function VerifyEmailContent() {
 
   if (!email) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="rounded-xl bg-white p-8 shadow-lg">
-          <p className="text-gray-700">Invalid verification link</p>
+      <div className="flex h-screen w-full items-center justify-center bg-black">
+        <div className="rounded-xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
+          <p className="text-gray-300">Invalid verification link</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg">
-        <div>
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
-            Verify your email
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            We sent a verification code to{' '}
-            <span className="font-medium text-gray-900">{email}</span>
-          </p>
-        </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleVerify}>
-          <div className="flex justify-center">
-            <InputOTP
-              maxLength={6}
-              value={otp}
-              onChange={setOtp}
-              disabled={loading}
-              className="gap-2"
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
+    <div className="flex h-screen w-full items-center justify-center bg-black">
+      <div className="relative h-full w-full max-w-md bg-black px-8 py-12 md:h-auto md:rounded-2xl md:shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+        <div className="absolute left-0 top-0 h-16 w-16 rounded-tl-2xl border-l-2 border-t-2 border-white/10" />
+        <div className="absolute bottom-0 right-0 h-16 w-16 rounded-br-2xl border-b-2 border-r-2 border-white/10" />
+        
+        <div className="relative space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-center text-3xl font-bold tracking-tight text-white">
+              Verify your email
+            </h2>
+            <p className="text-center text-sm text-gray-400">
+              We sent a verification code to{' '}
+              <span className="font-medium text-gray-300">{email}</span>
+            </p>
           </div>
 
-          {error && (
-            <div className="rounded-md bg-red-50 p-3 text-center text-sm text-red-500">
-              {error}
+          <form className="space-y-6" onSubmit={handleVerify}>
+            <div className="flex justify-center">
+              <InputOTP
+                maxLength={6}
+                value={otp}
+                onChange={setOtp}
+                disabled={loading}
+                className="gap-2"
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} className="border-white/10 bg-white/5 text-white" />
+                  <InputOTPSlot index={1} className="border-white/10 bg-white/5 text-white" />
+                  <InputOTPSlot index={2} className="border-white/10 bg-white/5 text-white" />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={3} className="border-white/10 bg-white/5 text-white" />
+                  <InputOTPSlot index={4} className="border-white/10 bg-white/5 text-white" />
+                  <InputOTPSlot index={5} className="border-white/10 bg-white/5 text-white" />
+                </InputOTPGroup>
+              </InputOTP>
             </div>
-          )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              {loading && (
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            {error && (
+              <div className="rounded-lg border border-red-500/10 bg-red-500/5 p-3 text-center text-sm text-red-400 backdrop-blur-sm">
+                {error}
+              </div>
+            )}
+
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`group relative flex w-full justify-center rounded-full border border-white/10 px-6 py-3 text-sm font-medium transition-all duration-300 
+                  ${loading 
+                    ? 'bg-white/10 text-transparent' 
+                    : 'bg-white/5 text-white hover:bg-white/10'
+                  } focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50`}
+              >
+                {loading && (
+                  <div className="absolute left-1/2 flex -translate-x-1/2 space-x-1">
+                    <div className="h-2 w-2 animate-[bounce_1s_infinite_0ms] rounded-full bg-white"></div>
+                    <div className="h-2 w-2 animate-[bounce_1s_infinite_200ms] rounded-full bg-white"></div>
+                    <div className="h-2 w-2 animate-[bounce_1s_infinite_400ms] rounded-full bg-white"></div>
+                  </div>
+                )}
+                <span className={loading ? 'invisible' : 'visible'}>
+                  {loading ? 'Verifying...' : 'Verify Email'}
                 </span>
-              )}
-              {loading ? 'Verifying...' : 'Verify Email'}
-            </button>
-          </div>
+              </button>
+            </div>
 
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={handleResendCode}
-              disabled={loading}
-              className="text-sm font-medium text-indigo-600 transition-colors duration-200 hover:text-indigo-500"
-            >
-              Resend verification code
-            </button>
-          </div>
-        </form>
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={handleResendCode}
+                disabled={loading}
+                className="text-sm font-medium text-blue-400 transition-colors duration-200 hover:text-blue-500"
+              >
+                Resend verification code
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -76,77 +76,91 @@ export default function AuthForm({
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl bg-gray-900 p-8 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-        <div>
-          <h2 className="text-center text-3xl font-bold tracking-tight text-white">
-            {title}
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">{subtitle}</p>
-        </div>
-
-        {successMessage && (
-          <div className="rounded-md border border-gray-700 bg-gray-800 px-4 py-3 text-gray-300">
-            {successMessage}
+    <div className="flex h-screen w-full items-center justify-center bg-black">
+      <div className="relative h-full w-full max-w-md bg-black px-8 py-12 md:h-auto md:rounded-2xl md:shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+        <div className="absolute left-0 top-0 h-16 w-16 rounded-tl-2xl border-l-2 border-t-2 border-white/10" />
+        <div className="absolute bottom-0 right-0 h-16 w-16 rounded-br-2xl border-b-2 border-r-2 border-white/10" />
+        
+        <div className="relative space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-center text-3xl font-bold tracking-tight text-white">
+              {title}
+            </h2>
+            <p className="text-center text-sm text-gray-400">{subtitle}</p>
           </div>
-        )}
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="mt-8 space-y-6"
-          >
-            <div className="space-y-4">
-              {fields.map((field) => (
-                <FormField
-                  key={field.name}
-                  control={form.control}
-                  name={field.name}
-                  render={({ field: formField }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-300">
-                        {field.label}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...formField}
-                          type={field.type}
-                          placeholder={field.placeholder}
-                          autoComplete={field.autoComplete}
-                          className="w-full rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-gray-100 placeholder-gray-500 focus:border-white focus:ring-2 focus:ring-white"
-                        />
-                      </FormControl>
-                      <FormMessage className="text-sm text-gray-400" />
-                    </FormItem>
+          {successMessage && (
+            <div className="animate-fade-in rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-gray-300 backdrop-blur-sm">
+              {successMessage}
+            </div>
+          )}
+
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-6"
+            >
+              <div className="space-y-4">
+                {fields.map((field) => (
+                  <FormField
+                    key={field.name}
+                    control={form.control}
+                    name={field.name}
+                    render={({ field: formField }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-300">
+                          {field.label}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...formField}
+                            type={field.type}
+                            placeholder={field.placeholder}
+                            autoComplete={field.autoComplete}
+                            className="w-full rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-gray-100 placeholder-gray-500 backdrop-blur-sm transition-all duration-200 focus:border-white/20 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-white/20"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-sm text-red-400" />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`group relative flex w-full justify-center rounded-full border border-white/10 px-6 py-3 text-sm font-medium transition-all duration-300 
+                    ${loading 
+                      ? 'bg-white/10 text-transparent' 
+                      : 'bg-white/5 text-white hover:bg-white/10'
+                    } focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50`}
+                >
+                  {/* Animated dots for loading state */}
+                  {loading && (
+                    <div className="absolute left-1/2 flex -translate-x-1/2 space-x-1">
+                      <div className="h-2 w-2 animate-[bounce_1s_infinite_0ms] rounded-full bg-white"></div>
+                      <div className="h-2 w-2 animate-[bounce_1s_infinite_200ms] rounded-full bg-white"></div>
+                      <div className="h-2 w-2 animate-[bounce_1s_infinite_400ms] rounded-full bg-white"></div>
+                    </div>
                   )}
-                />
-              ))}
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-gray-700 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900"
-              >
-                {loading ? (
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                  <span className={loading ? 'invisible' : 'visible'}>
+                    {submitLabel}
                   </span>
-                ) : null}
-                {loading ? loadingLabel : submitLabel}
-              </button>
-            </div>
-          </form>
-        </Form>
+                </button>
+              </div>
+            </form>
+          </Form>
 
-        <div className="text-center text-sm">
-          <Link
-            href={linkHref}
-            className="font-medium text-gray-400 transition-colors duration-200 hover:text-gray-300"
-          >
-            {linkText}
-          </Link>
+          <div className="text-center text-sm">
+            <Link
+              href={linkHref}
+              className="font-medium text-blue-400 transition-colors duration-200 hover:text-blue-500"
+            >
+              {linkText}
+            </Link>
+          </div>
         </div>
       </div>
     </div>
