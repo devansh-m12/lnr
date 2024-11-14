@@ -14,7 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ChevronDown, User, Settings, LogOut, BookOpen, Heart, History, LucideIcon } from "lucide-react";
+import { ChevronDown, User, Settings, LogOut, BookOpen, Heart, History, LucideIcon, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 // Define types for our navigation items
 type DropdownItem = {
@@ -32,6 +33,7 @@ type NavigationItem = {
 const Header = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation: NavigationItem[] = [
     { 
@@ -69,28 +71,29 @@ const Header = () => {
 
       {/* Main header content */}
       <div className="relative border-b border-white/10 bg-black/50 backdrop-blur-xl">
-        <div className="container flex h-20 max-w-screen-2xl items-center">
-          <div className="flex flex-1 items-center justify-between">
-            {/* Logo with hover effect */}
-            <Link href="/" className="group flex items-center space-x-3">
+        <div className="px-4 sm:px-6 lg:px-8 mx-auto flex h-16 sm:h-20 w-full max-w-[2000px] items-center">
+          <div className="flex flex-1 items-center justify-between w-full">
+            {/* Logo with adjusted spacing */}
+            <Link href="/" className="group flex items-center space-x-2 sm:space-x-3">
               <div className="relative">
                 <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 
                   opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500" />
                 <Image
                   src="/logo.png"
                   alt="Logo"
-                  width={40}
-                  height={40}
+                  width={32}
+                  height={32}
                   className="relative rounded-sm transform transition-all duration-300 
-                    group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                    group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]
+                    sm:w-10 sm:h-10"
                 />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400 
+              <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400 
                 bg-clip-text text-white">D3V1</span>
             </Link>
 
-            {/* Navigation with dropdowns */}
-            <nav className="flex items-center space-x-8 text-base font-medium">
+            {/* Desktop Navigation - adjusted spacing */}
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium">
               {navigation.map((item) => (
                 item.dropdownItems ? (
                   <DropdownMenu key={item.name}>
@@ -130,25 +133,23 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Auth section with dropdown */}
-            <div className="flex items-center space-x-4">
+            {/* Desktop Auth Section - adjusted spacing */}
+            <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
               {session ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="lg" 
+                    <Button variant="ghost" 
                       className="relative group overflow-hidden rounded-full border border-white/20 
-                        hover:border-white/40 transition-all duration-300">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        hover:border-white/40 transition-all duration-300 h-9 px-3 lg:h-10 lg:px-4">
                       <div className="flex items-center space-x-2">
                         <Image
                           src={session.user?.image || "https://randomuser.me/api/portraits/men/1.jpg"}
                           alt="Profile"
-                          width={24}
-                          height={24}
-                          className="rounded-full"
+                          width={20}
+                          height={20}
+                          className="rounded-full lg:w-6 lg:h-6"
                         />
-                        <span className="relative">{session.user?.name}</span>
+                        <span className="relative text-sm lg:text-base">{session.user?.name}</span>
                         <ChevronDown className="h-4 w-4" />
                       </div>
                     </Button>
@@ -180,11 +181,9 @@ const Header = () => {
               ) : (
                 <>
                   <Link href="/auth/login">
-                    <Button variant="ghost" size="lg"
+                    <Button variant="ghost"
                       className="relative group overflow-hidden rounded-full border border-white/20 
-                        hover:border-white/40 transition-all duration-300">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        hover:border-white/40 transition-all duration-300 h-9 px-3 lg:h-10 lg:px-4 text-sm lg:text-base">
                       <span className="relative">Sign In</span>
                     </Button>
                   </Link>
@@ -192,19 +191,140 @@ const Header = () => {
                     <Button
                       className="relative group overflow-hidden rounded-full bg-gradient-to-r 
                         from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 
-                        transition-all duration-300"
-                      size="lg"
+                        transition-all duration-300 h-9 px-3 lg:h-10 lg:px-4 text-sm lg:text-base"
                     >
-                      <div className="absolute inset-0 bg-white/10 opacity-0 
-                        group-hover:opacity-100 transition-opacity duration-300" />
                       <span className="relative">Sign Up</span>
                     </Button>
                   </Link>
                 </>
               )}
             </div>
+
+            {/* Mobile Menu Button - adjusted size */}
+            <button
+              className="md:hidden p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
+              ) : (
+                <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu - adjusted padding and spacing */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-black/90 backdrop-blur-xl border-b border-white/10">
+            <div className="px-4 sm:px-6 py-4">
+              {/* Mobile Navigation */}
+              <nav className="flex flex-col space-y-3">
+                {navigation.map((item) => (
+                  <div key={item.name} className="flex flex-col">
+                    {item.dropdownItems ? (
+                      <>
+                        <span className="text-white font-medium px-3 py-1.5">{item.name}</span>
+                        <div className="ml-3 flex flex-col space-y-1.5">
+                          {item.dropdownItems.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.name}
+                              href={dropdownItem.href}
+                              className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {dropdownItem.icon && <dropdownItem.icon className="h-4 w-4" />}
+                              <span className="text-sm">{dropdownItem.name}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "px-3 py-1.5 transition-colors hover:text-white text-sm",
+                          pathname === item.href ? "text-white" : "text-gray-400"
+                        )}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </nav>
+
+              {/* Mobile Auth Section - adjusted spacing */}
+              <div className="mt-4 space-y-3">
+                {session ? (
+                  <>
+                    <div className="flex items-center space-x-2 px-3 py-1.5">
+                      <Image
+                        src={session.user?.image || "https://randomuser.me/api/portraits/men/1.jpg"}
+                        alt="Profile"
+                        width={20}
+                        height={20}
+                        className="rounded-full lg:w-6 lg:h-6"
+                      />
+                      <span className="text-white">{session.user?.name}</span>
+                    </div>
+                    <Link
+                      href="/me"
+                      className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <User className="h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Settings className="h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/login"
+                      className="w-full"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Button variant="ghost" size="lg" className="w-full">
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      className="w-full"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Button
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                        size="lg"
+                      >
+                        Sign Up
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );
