@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
 import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import { Menu, X, User, Settings, LogOut, BookOpen, Heart, History } from "lucide-react";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,318 +15,268 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ChevronDown, User, Settings, LogOut, BookOpen, Heart, History, LucideIcon, Menu, X } from "lucide-react";
-import { useState } from "react";
-
-// Define types for our navigation items
-type DropdownItem = {
-  name: string;
-  href: string;
-  icon?: LucideIcon;
-};
 
 type NavigationItem = {
   name: string;
   href: string;
-  dropdownItems?: DropdownItem[];
+  items?: { name: string; href: string; icon?: any }[];
 };
 
 const Header = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const navigation: NavigationItem[] = [
     { 
-      name: "Browse", 
-      href: "#",
-      dropdownItems: [
+      name: "½ Browse", 
+      href: "/browse",
+      items: [
         { name: "Latest Updates", href: "/latest", icon: BookOpen },
         { name: "Popular Series", href: "/popular", icon: Heart },
-        { name: "Categories", href: "/categories", icon: BookOpen },
         { name: "Reading History", href: "/history", icon: History },
       ]
     },
     { 
-      name: "Community", 
-      href: "#",
-      dropdownItems: [
+      name: "½ Community", 
+      href: "/community",
+      items: [
         { name: "Forums", href: "/forums" },
         { name: "Discord", href: "/discord" },
         { name: "Blog", href: "/blog" },
       ]
     },
-    { name: "About", href: "/me" },
+    { name: "½ About", href: "/me" },
   ];
   
   return (
-    <header className="sticky top-0 z-50 w-full">
-      {/* Animated background gradients */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -inset-[10px] opacity-20">
-          <div className="absolute top-0 left-1/4 w-32 h-32 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob" />
-          <div className="absolute top-0 right-1/4 w-32 h-32 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000" />
-          <div className="absolute top-0 left-1/2 w-32 h-32 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000" />
-        </div>
-      </div>
+    <header className="fixed top-0 z-50 w-full p-4">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex items-start justify-between">
+          {/* Logo */}
+          <Link 
+            href="/" 
+            className="group bg-black/20 backdrop-blur-sm px-2 py-1 rounded-md 
+              hover:bg-white/30 transition-all duration-300"
+          >
+            <div className="flex items-center space-x-1">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={20}
+                height={20}
+                className="rounded-sm transform transition-all duration-300 
+                  group-hover:scale-110"
+              />
+              <span className="text-sm font-medium italic font-serif">D3V1</span>
+            </div>
+          </Link>
 
-      {/* Main header content */}
-      <div className="relative border-b border-white/10 bg-black/50 backdrop-blur-xl">
-        <div className="px-4 sm:px-6 lg:px-8 mx-auto flex h-16 sm:h-20 w-full max-w-[2000px] items-center">
-          <div className="flex flex-1 items-center justify-between w-full">
-            {/* Logo with adjusted spacing */}
-            <Link href="/" className="group flex items-center space-x-2 sm:space-x-3">
-              <div className="relative">
-                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 
-                  opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500" />
-                <Image
-                  src="/logo.png"
-                  alt="Logo"
-                  width={32}
-                  height={32}
-                  className="relative rounded-sm transform transition-all duration-300 
-                    group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]
-                    sm:w-10 sm:h-10"
-                />
-              </div>
-              <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400 
-                bg-clip-text text-white">D3V1</span>
-            </Link>
-
-            {/* Desktop Navigation - adjusted spacing */}
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium">
-              {navigation.map((item) => (
-                item.dropdownItems ? (
-                  <DropdownMenu key={item.name}>
-                    <DropdownMenuTrigger className="flex items-center space-x-1 px-4 py-2 hover:text-white transition-colors">
-                      <span>{item.name}</span>
-                      <ChevronDown className="h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-black/90 backdrop-blur-xl border border-white/10">
-                      <DropdownMenuLabel>{item.name}</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {item.dropdownItems.map((dropdownItem) => (
-                        <DropdownMenuItem key={dropdownItem.name} className="hover:bg-white/10">
-                          <Link href={dropdownItem.href} className="flex items-center space-x-2 w-full">
-                            {dropdownItem.icon && <dropdownItem.icon className="h-4 w-4" />}
-                            <span>{dropdownItem.name}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "relative px-4 py-2 transition-all duration-300 hover:text-white group",
-                      pathname === item.href ? "text-white" : "text-gray-400"
-                    )}
-                  >
-                    <span className="relative z-10">{item.name}</span>
-                    {pathname === item.href && (
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 
-                        blur-sm transition-all duration-300" />
-                    )}
-                  </Link>
-                )
-              ))}
-            </nav>
-
-            {/* Desktop Auth Section - adjusted spacing */}
-            <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
-              {session ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" 
-                      className="relative group overflow-hidden rounded-full border border-white/20 
-                        hover:border-white/40 transition-all duration-300 h-9 px-3 lg:h-10 lg:px-4">
-                      <div className="flex items-center space-x-2">
-                        <Image
-                          src={session.user?.image || "https://randomuser.me/api/portraits/men/1.jpg"}
-                          alt="Profile"
-                          width={20}
-                          height={20}
-                          className="rounded-full lg:w-6 lg:h-6"
-                        />
-                        <span className="relative text-sm lg:text-base">{session.user?.name}</span>
-                        <ChevronDown className="h-4 w-4" />
-                      </div>
-                    </Button>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-start space-x-4">
+            {navigation.map((item) => (
+              item.items ? (
+                <DropdownMenu key={item.href}>
+                  <DropdownMenuTrigger className="bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg 
+                    text-sm transition-all duration-300 hover:bg-black/30 text-white/70 hover:text-white">
+                    <span>{item.name}</span>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-black/90 backdrop-blur-xl border border-white/10">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="hover:bg-white/10">
-                      <Link href="/me" className="flex items-center space-x-2 w-full">
-                        <User className="h-4 w-4" />
-                        <span>Profile</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="hover:bg-white/10">
-                      <Link href="/settings" className="flex items-center space-x-2 w-full">
-                        <Settings className="h-4 w-4" />
-                        <span>Settings</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="hover:bg-white/10" onClick={() => signOut()}>
-                      <div className="flex items-center space-x-2 w-full">
-                        <LogOut className="h-4 w-4" />
-                        <span>Sign Out</span>
-                      </div>
-                    </DropdownMenuItem>
+                  <DropdownMenuContent className="w-56 bg-black/20 backdrop-blur-xl 
+                    border border-white/10 mt-2">
+                    <DropdownMenuLabel className="text-white/70">{item.name}</DropdownMenuLabel>
+                    <DropdownMenuSeparator className="bg-white/10" />
+                    {item.items.map((dropdownItem) => (
+                      <DropdownMenuItem 
+                        key={dropdownItem.href} 
+                        className="hover:bg-black/30 focus:bg-black/30"
+                      >
+                        <Link 
+                          href={dropdownItem.href} 
+                          className="flex items-center space-x-2 w-full text-white/70 
+                            hover:text-white transition-colors"
+                        >
+                          {dropdownItem.icon && <dropdownItem.icon className="h-4 w-4" />}
+                          <span>{dropdownItem.name}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <>
-                  <Link href="/auth/login">
-                    <Button variant="ghost"
-                      className="relative group overflow-hidden rounded-full border border-white/20 
-                        hover:border-white/40 transition-all duration-300 h-9 px-3 lg:h-10 lg:px-4 text-sm lg:text-base">
-                      <span className="relative">Sign In</span>
-                    </Button>
-                  </Link>
-                  <Link href="/auth/register">
-                    <Button
-                      className="relative group overflow-hidden rounded-full bg-gradient-to-r 
-                        from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 
-                        transition-all duration-300 h-9 px-3 lg:h-10 lg:px-4 text-sm lg:text-base"
-                    >
-                      <span className="relative">Sign Up</span>
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg text-sm 
+                    transition-all duration-300 hover:bg-black/30 text-white/70 hover:text-white"
+                >
+                  {item.name}
+                </Link>
+              )
+            ))}
 
-            {/* Mobile Menu Button - adjusted size */}
-            <button
-              className="md:hidden p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5 sm:h-6 sm:w-6" />
-              ) : (
-                <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu - adjusted padding and spacing */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-black/90 backdrop-blur-xl border-b border-white/10">
-            <div className="px-4 sm:px-6 py-4">
-              {/* Mobile Navigation */}
-              <nav className="flex flex-col space-y-3">
-                {navigation.map((item) => (
-                  <div key={item.name} className="flex flex-col">
-                    {item.dropdownItems ? (
-                      <>
-                        <span className="text-white font-medium px-3 py-1.5">{item.name}</span>
-                        <div className="ml-3 flex flex-col space-y-1.5">
-                          {item.dropdownItems.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.name}
-                              href={dropdownItem.href}
-                              className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {dropdownItem.icon && <dropdownItem.icon className="h-4 w-4" />}
-                              <span className="text-sm">{dropdownItem.name}</span>
-                            </Link>
-                          ))}
-                        </div>
-                      </>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={cn(
-                          "px-3 py-1.5 transition-colors hover:text-white text-sm",
-                          pathname === item.href ? "text-white" : "text-gray-400"
-                        )}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-              </nav>
-
-              {/* Mobile Auth Section - adjusted spacing */}
-              <div className="mt-4 space-y-3">
-                {session ? (
-                  <>
-                    <div className="flex items-center space-x-2 px-3 py-1.5">
-                      <Image
-                        src={session.user?.image || "https://randomuser.me/api/portraits/men/1.jpg"}
-                        alt="Profile"
-                        width={20}
-                        height={20}
-                        className="rounded-full lg:w-6 lg:h-6"
-                      />
-                      <span className="text-white">{session.user?.name}</span>
-                    </div>
-                    <Link
-                      href="/me"
-                      className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
+            {/* Auth Section with Dropdown */}
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="bg-black/20 backdrop-blur-sm px-4 py-2 
+                  rounded-lg transition-all duration-300 hover:bg-black/30 text-white/70 
+                  hover:text-white flex items-center space-x-2">
+                  <Image
+                    src={session.user?.image || "https://github.com/shadcn.png"}
+                    alt="Profile"
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
+                  <span className="text-sm">{session.user?.name}</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-black/20 backdrop-blur-xl 
+                  border border-white/10 mt-2">
+                  <DropdownMenuLabel className="text-white/70">My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-white/10" />
+                  <DropdownMenuItem className="hover:bg-black/30 focus:bg-black/30">
+                    <Link href="/me" className="flex items-center space-x-2 w-full text-white/70 
+                      hover:text-white">
                       <User className="h-4 w-4" />
                       <span>Profile</span>
                     </Link>
-                    <Link
-                      href="/settings"
-                      className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:bg-black/30 focus:bg-black/30">
+                    <Link href="/settings" className="flex items-center space-x-2 w-full text-white/70 
+                      hover:text-white">
                       <Settings className="h-4 w-4" />
                       <span>Settings</span>
                     </Link>
-                    <button
-                      onClick={() => {
-                        signOut();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="flex items-center space-x-2 px-3 py-1.5 text-gray-400 hover:text-white transition-colors"
-                    >
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-white/10" />
+                  <DropdownMenuItem 
+                    className="hover:bg-black/30 focus:bg-black/30"
+                    onClick={() => signOut()}
+                  >
+                    <div className="flex items-center space-x-2 w-full text-white/70 hover:text-white">
                       <LogOut className="h-4 w-4" />
                       <span>Sign Out</span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/auth/login"
-                      className="w-full"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Button variant="ghost" size="lg" className="w-full">
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link
-                      href="/auth/register"
-                      className="w-full"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Button
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-                        size="lg"
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-start space-x-2">
+                <Link
+                  href="/auth/login"
+                  className="bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg text-sm 
+                    text-white/70 hover:text-white hover:bg-black/30 transition-all duration-300"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm 
+                    text-white hover:bg-white/20 transition-all duration-300"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden bg-black/20 backdrop-blur-sm p-2 rounded-lg 
+              text-white/70 hover:text-white hover:bg-black/30 transition-all duration-300"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden mt-4 bg-black/20 backdrop-blur-sm rounded-lg 
+          border border-white/10">
+          <div className="p-4 space-y-2">
+            {navigation.map((item) => (
+              <div key={item.href} className="space-y-2">
+                <button
+                  onClick={() => setOpenDropdown(openDropdown === item.href ? null : item.href)}
+                  className={cn(
+                    "w-full text-left px-3 py-2 text-sm rounded-lg transition-all duration-300",
+                    "text-white/70 hover:text-white hover:bg-black/30",
+                    openDropdown === item.href && "bg-black/30 text-white"
+                  )}
+                >
+                  {item.name}
+                </button>
+                
+                {/* Mobile Dropdown */}
+                {item.items && openDropdown === item.href && (
+                  <div className="ml-4 space-y-1">
+                    {item.items.map((subItem) => (
+                      <Link
+                        key={subItem.href}
+                        href={subItem.href}
+                        className="flex items-center space-x-2 px-3 py-2 text-sm text-white/70 
+                          hover:text-white hover:bg-black/30 rounded-lg transition-all duration-300"
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Sign Up
-                      </Button>
-                    </Link>
-                  </>
+                        {subItem.icon && <subItem.icon className="h-4 w-4" />}
+                        <span>{subItem.name}</span>
+                      </Link>
+                    ))}
+                  </div>
                 )}
               </div>
-            </div>
+            ))}
+
+            {/* Mobile Auth */}
+            {session ? (
+              <div className="border-t border-white/10 pt-2 mt-2">
+                <div className="px-3 py-2 text-sm text-white/70 flex items-center space-x-2">
+                  <Image
+                    src={session.user?.image || "https://github.com/shadcn.png"}
+                    alt="Profile"
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
+                  <span>{session.user?.name}</span>
+                </div>
+                <button
+                  onClick={() => signOut()}
+                  className="w-full text-left px-3 py-2 text-sm text-white/70 
+                    hover:text-white hover:bg-black/30 rounded-lg transition-all duration-300"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="border-t border-white/10 pt-2 mt-2 space-y-2">
+                <Link
+                  href="/auth/login"
+                  className="block px-3 py-2 text-sm text-white/70 hover:text-white 
+                    hover:bg-black/30 rounded-lg transition-all duration-300"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="block px-3 py-2 text-sm text-white hover:bg-white/10 
+                    rounded-lg transition-all duration-300"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 };

@@ -1,127 +1,243 @@
 {
     "name": "Devansh Mahant",
+    "tagline": "Full Stack Developer & Competitive Programmer",
     "email": "devanshmahant12092003@gmail.com",
     "phone": "+91 9584775877",
+    "summary": "Passionate software developer with expertise in full-stack development and competitive programming. Experienced in building scalable web applications and solving complex algorithmic problems. Strong foundation in both frontend and backend technologies with a focus on creating efficient, user-friendly solutions.",
     "education": [
-    {
-    "school": "IIIT DHARWAD",
-    "degree": "BS in Computer Engineering",
-    "program": "Bachelor Of Technology",
-    "graduation_date": "Jul 2024",
-    "location": "Dharwad, Karnataka, IN",
-    "gpa": 7.41
-    },
-    {
-    "school": "EDMERIT HS",
-    "degree": "High School Diploma",
-    "graduation_date": "May 2020",
-    "location": "Indore, MP"
-    }
+        {
+            "school": "IIIT DHARWAD",
+            "degree": "BS in Computer Engineering",
+            "program": "Bachelor Of Technology",
+            "graduation_date": "Jul 2024",
+            "location": "Dharwad, Karnataka, IN",
+            "gpa": 7.41,
+            "highlights": [
+                "Core team member of Programming Club",
+                "Technical Coordinator for college fest",
+                "Published research paper on AI-based music recommendation systems"
+            ]
+        },
+        {
+            "school": "EDMERIT HS",
+            "degree": "High School Diploma",
+            "graduation_date": "May 2020",
+            "location": "Indore, MP",
+            "achievements": [
+                "School topper in Computer Science",
+                "Led school's programming club"
+            ]
+        }
     ],
     "skills": {
-    "programming": [
-    "C++",
-    "Python",
-    "JavaScript",
-    "HTML/CSS",
-    "Rust",
-    "Solidity"
-    ],
-    "technologies_and_frameworks": [
-    "NodeJs",
-    "NextJs",
-    "ReactJS",
-    "ExpressJs",
-    "MongoDB"
-    ]
+        "programming": [
+            {
+                "name": "C++",
+                "proficiency": "Expert",
+                "years": 4
+            },
+            {
+                "name": "Python",
+                "proficiency": "Advanced",
+                "years": 3
+            },
+            {
+                "name": "JavaScript",
+                "proficiency": "Advanced",
+                "years": 3
+            },
+            {
+                "name": "HTML/CSS",
+                "proficiency": "Advanced",
+                "years": 3
+            },
+            {
+                "name": "Rust",
+                "proficiency": "Intermediate",
+                "years": 1
+            },
+            {
+                "name": "Solidity",
+                "proficiency": "Intermediate",
+                "years": 1
+            }
+        ],
+        "technologies_and_frameworks": [
+            {
+                "name": "NodeJs",
+                "proficiency": "Advanced",
+                "projects": 15
+            },
+            {
+                "name": "NextJs",
+                "proficiency": "Advanced",
+                "projects": 10
+            },
+            {
+                "name": "ReactJS",
+                "proficiency": "Advanced",
+                "projects": 12
+            },
+            {
+                "name": "ExpressJs",
+                "proficiency": "Advanced",
+                "projects": 8
+            },
+            {
+                "name": "MongoDB",
+                "proficiency": "Advanced",
+                "projects": 10
+            }
+        ],
+        "additional_skills": [
+            "Git & Version Control",
+            "AWS Cloud Services",
+            "Docker",
+            "RESTful APIs",
+            "GraphQL",
+            "Test-Driven Development",
+            "Agile Methodologies"
+        ]
     },
     "coursework": {
-    "software": [
-    "Object Oriented Programming",
-    "Software Engineering Tools Lab (BASH & Python 3)",
-    "Data Structures",
-    "Programming in Python",
-    "Advanced C Programming",
-    "Compilers"
-    ],
-    "hardware": [
-    "ASIC Design",
-    "Microcontroller Design/Interfacing",
-    "Digital Computer Design & Prototyping",
-    "Electronic Circuit Analysis & Design"
-    ]
+        "software": [
+            {
+                "name": "Object Oriented Programming",
+                "grade": "A",
+                "key_concepts": ["Inheritance", "Polymorphism", "Encapsulation"]
+            },
+            {
+                "name": "Software Engineering Tools Lab",
+                "technologies": ["BASH", "Python 3"],
+                "projects": ["Automated Build System", "Code Analysis Tools"]
+            },
+            {
+                "name": "Data Structures",
+                "grade": "A+",
+                "implementations": ["AVL Trees", "Graph Algorithms", "Hash Tables"]
+            },
+            {
+                "name": "Programming in Python",
+                "projects": ["Web Scraper", "Data Analysis Tool"]
+            },
+            {
+                "name": "Advanced C Programming",
+                "topics": ["Memory Management", "Pointers", "System Calls"]
+            },
+            {
+                "name": "Compilers",
+                "project": "Built a basic compiler for a subset of C"
+            }
+        ],
+        "hardware": [
+            {
+                "name": "ASIC Design",
+                "tools": ["Verilog", "SystemVerilog"]
+            },
+            {
+                "name": "Microcontroller Design/Interfacing",
+                "platforms": ["Arduino", "ESP32"]
+            },
+            {
+                "name": "Digital Computer Design & Prototyping",
+                "projects": ["CPU Design", "Memory Interface"]
+            },
+            {
+                "name": "Electronic Circuit Analysis & Design",
+                "tools": ["SPICE", "Multisim"]
+            }
+        ]
     },
     "links": {
-    "leetcode": "https://leetcode.com/GoGuru",
-    "github": "https://github.com/devansh-m12",
-    "codechef": "https://www.codechef.com/users/nyxno",
-    "codeforces": "https://codeforces.com/profile/m devansh",
-    "linkedin": "https://www.linkedin.com/in/devansh-m12"
+        "leetcode": {
+            "url": "https://leetcode.com/GoGuru",
+            "problems_solved": 1000,
+            "contest_rating": 2238
+        },
+        "github": {
+            "url": "https://github.com/devansh-m12",
+            "repositories": 30,
+            "stars": 50
+        },
+        "codechef": {
+            "url": "https://www.codechef.com/users/nyxno",
+            "rating": 1911,
+            "division": "Division 1"
+        },
+        "codeforces": {
+            "url": "https://codeforces.com/profile/m devansh",
+            "rating": 1653,
+            "title": "Expert"
+        },
+        "linkedin": {
+            "url": "https://www.linkedin.com/in/devansh-m12",
+            "followers": 3500
+        }
     },
     "experience": [
-    {
-    "company": "CLOUDBLOOM",
-    "title": "Jr. Software Developer Intern",
-    "start_date": "Apr 2024",
-    "end_date": "Aug 2024",
-    "location": "Bangalore",
-    "responsibilities": [
-    "Contributed to front-end and back-end development of a Learning Management System (LMS), impacting 1000+ users with improved interface and functionality",
-    "Implemented 10 new features that enhanced user experience and system efficiency, leading to a 15% increase in user satisfaction",
-    "Resolved 50+ bugs and performed code refactoring, resulting in a 20% boost in performance and maintainability"
-    ]
-    },
-    {
-    "company": "GEEKSFORGEEKS",
-    "title": "Teaching Assistant",
-    "start_date": "Feb 2024",
-    "end_date": "Mar 2024",
-    "location": "Remote",
-    "responsibilities": [
-    "Assisted 100+ users weekly in resolving Data Structures and Algorithms (DSA) problems, improving problem-solving skills by 30%",
-    "Collaborated with 5 course instructors to create and refine educational materials, increasing course engagement by 25%",
-    "Conducted 12 virtual workshops and discussions, enhancing learner understanding of DSA concepts"
-    ]
-    },
-    {
-    "company": "MochaWorks",
-    "title": "Problem Setter",
-    "start_date": "June 2023",
-    "end_date": "Current",
-    "location": "Remote",
-    "responsibilities": [
-    "Designed and developed 10-15 problems for use in interviews across various colleges, enhancing the assessment process for potential candidates",
-    "Collaborated with the MochaWorks team to ensure problem quality and relevance to industry standards"
-    ]
-    }
+        {
+            "company": "CLOUDBLOOM",
+            "title": "Jr. Software Developer Intern",
+            "start_date": "Apr 2024",
+            "end_date": "Aug 2024",
+            "location": "Bangalore",
+            "responsibilities": [
+                "Contributed to front-end and back-end development of a Learning Management System (LMS), impacting 1000+ users with improved interface and functionality",
+                "Implemented 10 new features that enhanced user experience and system efficiency, leading to a 15% increase in user satisfaction",
+                "Resolved 50+ bugs and performed code refactoring, resulting in a 20% boost in performance and maintainability"
+            ]
+        },
+        {
+            "company": "GEEKSFORGEEKS",
+            "title": "Teaching Assistant",
+            "start_date": "Feb 2024",
+            "end_date": "Mar 2024",
+            "location": "Remote",
+            "responsibilities": [
+                "Assisted 100+ users weekly in resolving Data Structures and Algorithms (DSA) problems, improving problem-solving skills by 30%",
+                "Collaborated with 5 course instructors to create and refine educational materials, increasing course engagement by 25%",
+                "Conducted 12 virtual workshops and discussions, enhancing learner understanding of DSA concepts"
+            ]
+        },
+        {
+            "company": "MochaWorks",
+            "title": "Problem Setter",
+            "start_date": "June 2023",
+            "end_date": "Current",
+            "location": "Remote",
+            "responsibilities": [
+                "Designed and developed 10-15 problems for use in interviews across various colleges, enhancing the assessment process for potential candidates",
+                "Collaborated with the MochaWorks team to ensure problem quality and relevance to industry standards"
+            ]
+        }
     ],
     "projects": [
-    {
-    "name": "MIS MESSAGES - ANONYMOUS MESSAGING",
-    "technologies": [
-    "NextJs",
-    "NextAuth",
-    "MongoDB"
-    ],
-    "description": "Developed an anonymous messaging website enabling users to gather feedback via forms without revealing respondents' identities. Integrated NextAuth for secure authentication, implementing email OTP verification for enhanced user security. Utilized MongoDB for efficient data storage and retrieval, ensuring seamless user experience and data management."
-    },
-    {
-    "name": "SPOTIFY AI RECOMMENDER",
-    "technologies": [
-    "NextJs",
-    "Spotify API",
-    "OAuth",
-    "Google Gemini"
-    ],
-    "description": "Implemented an AI-based music search platform where users can chat their feelings or preferences to get personalized song recommendations. Integrated Spotify API and OAuth for secure authentication and access to user data and song previews. Utilized Google Gemini for natural language processing to interpret user input and generate tailored music suggestions. Developed the entire project within a 24-hour timeframe, showcasing rapid prototyping skills."
-    }
+        {
+            "name": "MIS MESSAGES - ANONYMOUS MESSAGING",
+            "technologies": [
+                "NextJs",
+                "NextAuth",
+                "MongoDB"
+            ],
+            "description": "Developed an anonymous messaging website enabling users to gather feedback via forms without revealing respondents' identities. Integrated NextAuth for secure authentication, implementing email OTP verification for enhanced user security. Utilized MongoDB for efficient data storage and retrieval, ensuring seamless user experience and data management."
+        },
+        {
+            "name": "SPOTIFY AI RECOMMENDER",
+            "technologies": [
+                "NextJs",
+                "Spotify API",
+                "OAuth",
+                "Google Gemini"
+            ],
+            "description": "Implemented an AI-based music search platform where users can chat their feelings or preferences to get personalized song recommendations. Integrated Spotify API and OAuth for secure authentication and access to user data and song previews. Utilized Google Gemini for natural language processing to interpret user input and generate tailored music suggestions. Developed the entire project within a 24-hour timeframe, showcasing rapid prototyping skills."
+        }
     ],
     "achievements": [
-    "Selected as Regionalist for ACM ICPC'23",
-    "Top 0.9% on Leetcode with highest rating of 2238 (Guardian)",
-    "Codeforces Expert with highest rating of 1653",
-    "CodeChef 4-Star with highest rating of 1911",
-    "Ranked 425 at Codeforces Edu R-160 (top 16,000 competitive programmers)",
-    "Ranked 3rd at GfG Job-a-Thon 26 (top 3,500 competitive programmers)"
+        "Selected as Regionalist for ACM ICPC'23",
+        "Top 0.9% on Leetcode with highest rating of 2238 (Guardian)",
+        "Codeforces Expert with highest rating of 1653",
+        "CodeChef 4-Star with highest rating of 1911",
+        "Ranked 425 at Codeforces Edu R-160 (top 16,000 competitive programmers)",
+        "Ranked 3rd at GfG Job-a-Thon 26 (top 3,500 competitive programmers)"
     ]
-    }
+}
