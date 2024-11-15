@@ -60,6 +60,18 @@
     },
     "experience": [
     {
+    "company": "CLOUDBLOOM",
+    "title": "Jr. Software Developer Intern",
+    "start_date": "Apr 2024",
+    "end_date": "Aug 2024",
+    "location": "Bangalore",
+    "responsibilities": [
+    "Contributed to front-end and back-end development of a Learning Management System (LMS), impacting 1000+ users with improved interface and functionality",
+    "Implemented 10 new features that enhanced user experience and system efficiency, leading to a 15% increase in user satisfaction",
+    "Resolved 50+ bugs and performed code refactoring, resulting in a 20% boost in performance and maintainability"
+    ]
+    },
+    {
     "company": "GEEKSFORGEEKS",
     "title": "Teaching Assistant",
     "start_date": "Feb 2024",
@@ -72,19 +84,27 @@
     ]
     },
     {
-    "company": "CLOUDBLOOM",
-    "title": "Jr. Software Developer Intern",
-    "start_date": "Apr 2024",
-    "end_date": "Aug 2024",
-    "location": "Bangalore",
+    "company": "MochaWorks",
+    "title": "Problem Setter",
+    "start_date": "June 2023",
+    "end_date": "Current",
+    "location": "Remote",
     "responsibilities": [
-    "Contributed to front-end and back-end development of a Learning Management System (LMS), impacting 1000+ users with improved interface and functionality",
-    "Implemented 10 new features that enhanced user experience and system efficiency, leading to a 15% increase in user satisfaction",
-    "Resolved 50+ bugs and performed code refactoring, resulting in a 20% boost in performance and maintainability"
+    "Designed and developed 10-15 problems for use in interviews across various colleges, enhancing the assessment process for potential candidates",
+    "Collaborated with the MochaWorks team to ensure problem quality and relevance to industry standards"
     ]
     }
     ],
     "projects": [
+    {
+    "name": "MIS MESSAGES - ANONYMOUS MESSAGING",
+    "technologies": [
+    "NextJs",
+    "NextAuth",
+    "MongoDB"
+    ],
+    "description": "Developed an anonymous messaging website enabling users to gather feedback via forms without revealing respondents' identities. Integrated NextAuth for secure authentication, implementing email OTP verification for enhanced user security. Utilized MongoDB for efficient data storage and retrieval, ensuring seamless user experience and data management."
+    },
     {
     "name": "SPOTIFY AI RECOMMENDER",
     "technologies": [
@@ -94,15 +114,6 @@
     "Google Gemini"
     ],
     "description": "Implemented an AI-based music search platform where users can chat their feelings or preferences to get personalized song recommendations. Integrated Spotify API and OAuth for secure authentication and access to user data and song previews. Utilized Google Gemini for natural language processing to interpret user input and generate tailored music suggestions. Developed the entire project within a 24-hour timeframe, showcasing rapid prototyping skills."
-    },
-    {
-    "name": "MIS MESSAGES - ANONYMOUS MESSAGING",
-    "technologies": [
-    "NextJs",
-    "NextAuth",
-    "MongoDB"
-    ],
-    "description": "Developed an anonymous messaging website enabling users to gather feedback via forms without revealing respondents' identities. Integrated NextAuth for secure authentication, implementing email OTP verification for enhanced user security. Utilized MongoDB for efficient data storage and retrieval, ensuring seamless user experience and data management."
     }
     ],
     "achievements": [
@@ -114,5 +125,3 @@
     "Ranked 3rd at GfG Job-a-Thon 26 (top 3,500 competitive programmers)"
     ]
     }
-    
-    

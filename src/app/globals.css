@@ -237,7 +237,6 @@
     scroll-behavior: auto !important;
   }
 }
-
 /* Add these new timeline animations */
 @keyframes timeline-glow {
   0%, 100% {
@@ -306,4 +305,20 @@
 
 .perspective-1000 {
   perspective: 1000px;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
