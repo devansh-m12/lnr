@@ -1,0 +1,129 @@
+// Blog Related Models
+
+model BlogPost {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  content     String      @db.Text
+  excerpt     String?     @db.Text
+  cover_image String?
+  published   Boolean     @default(false)
+  featured    Boolean     @default(false)
+  views       Int         @default(0)
+  author_id   String
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  // Relations
+  author      User        @relation(fields: [author_id], references: [id])
+  categories  BlogPostCategory[]
+  tags        BlogPostTag[]
+  comments    BlogComment[]
+  likes       BlogLike[]
+  seo         BlogSEO?
+
+  @@index([author_id])
+  @@index([published])
+  @@index([featured])
+}
+
+model BlogCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?   @db.Text
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relations
+  posts       BlogPostCategory[]
+}
+
+model BlogTag {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relations
+  posts       BlogPostTag[]
+}
+
+// Junction Tables
+model BlogPostCategory {
+  post_id     String
+  category_id String
+
+  post        BlogPost     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  category    BlogCategory @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@id([post_id, category_id])
+  @@index([post_id])
+  @@index([category_id])
+}
+
+model BlogPostTag {
+  post_id     String
+  tag_id      String
+
+  post        BlogPost  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  tag         BlogTag   @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([post_id, tag_id])
+  @@index([post_id])
+  @@index([tag_id])
+}
+
+model BlogComment {
+  id          String    @id @default(cuid())
+  content     String    @db.Text
+  post_id     String
+  user_id     String
+  parent_id   String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relations
+  post        BlogPost    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent      BlogComment? @relation("CommentReplies", fields: [parent_id], references: [id])
+  replies     BlogComment[] @relation("CommentReplies")
+
+  @@index([post_id])
+  @@index([user_id])
+  @@index([parent_id])
+}
+
+model BlogLike {
+  id          String    @id @default(cuid())
+  post_id     String
+  user_id     String
+  created_at  DateTime  @default(now())
+
+  // Relations
+  post        BlogPost  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@index([post_id])
+  @@index([user_id])
+}
+
+model BlogSEO {
+  id              String    @id @default(cuid())
+  post_id         String    @unique
+  meta_title      String?
+  meta_description String?  @db.Text
+  meta_keywords   String?
+  og_title        String?
+  og_description  String?   @db.Text
+  og_image        String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  post            BlogPost  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  @@index([post_id])
+} 
