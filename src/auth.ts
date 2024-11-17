@@ -46,8 +46,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             },
           });
 
-          console.log(user);
-
           if (
             user &&
             user.password &&
@@ -77,7 +75,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             { cause: { redirect: '/register' } },
           );
         } catch (e: any) {
-          console.log('error', e);
           console.error(e);
         }
         return null;
@@ -93,13 +90,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token.avatar_url) {
         session.user.avatar_url = token.avatar_url;
       }
+      if (token.id) {
+        session.user.id = token.id;
+      }
       return session;
     },
     async jwt({ token, user }: { token: any; user: any }) {
-      console.log('token', token);
-      console.log('user', user);
       if (user) {
         token.avatar_url = user?.avatar_url;
+        token.id = user?.id;
       }
       return token;
     },
