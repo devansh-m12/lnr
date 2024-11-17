@@ -1,8 +1,3 @@
-// This is a reference file. Use schema.prisma.generated for Prisma operations
-// See separate files:
-// - user.prisma
-// - novel.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,3 +7,447 @@ datasource db {
   url = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
+
+// User Related Models
+
+
+// User Model
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  username      String    @unique
+  password      String?
+  avatar_url    String?
+  role          UserRole  @default(READER)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  token         String?
+
+  // Relations
+  accounts        Account[]
+  sessions        Session[]
+  authored_content Content[]
+  comments        Comment[]
+  library         UserLibrary[]
+  ratings         Rating[]
+  reading_progress ReadingProgress[]
+  bookmarks       Bookmark[]
+  blog_posts      BlogPost[]
+  blog_comments   BlogComment[]
+  blog_likes      BlogLike[]
+}
+
+// NextAuth Required Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+
+enum UserRole {
+  READER
+  AUTHOR
+  ADMIN
+} 
+// Novel Related Models
+
+// Content Models
+model Content {
+  id             String        @id @default(cuid())
+  title          String
+  description    String        @db.Text
+  cover_image_url String?
+  type           ContentType
+  status         ContentStatus @default(ONGOING)
+  rating         Float         @default(0)
+  views          Int          @default(0)
+  author_id      String
+  language       String        @default("en")
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+
+  // Relations
+  author          User            @relation(fields: [author_id], references: [id])
+  chapters        Chapter[]
+  library_entries UserLibrary[]
+  ratings         Rating[]
+  genres          ContentGenre[]
+  tags            ContentTag[]
+
+  @@index([author_id])
+  @@index([type])
+  @@index([status])
+}
+
+model Chapter {
+  id          String   @id @default(cuid())
+  title       String
+  chapter_number Float
+  content_id  String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relations
+  content         Content          @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  chapter_content ChapterContent?
+  comments        Comment[]
+  reading_progress ReadingProgress[]
+  bookmarks       Bookmark[]
+  library_entries UserLibrary[]
+
+  @@unique([content_id, chapter_number])
+  @@index([content_id])
+}
+
+model ChapterContent {
+  id              String        @id @default(cuid())
+  chapter_id      String        @unique
+  content_type    ContentType
+  text_content    String?       @db.Text
+  reading_direction ReadingDirection @default(LTR)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+
+  // Relations
+  chapter         Chapter       @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
+  images          ChapterImage[]
+
+  @@index([chapter_id])
+}
+
+model ChapterImage {
+  id                 String   @id @default(cuid())
+  chapter_content_id String
+  image_url          String
+  sequence_number    Int
+  created_at         DateTime @default(now())
+
+  // Relations
+  chapter_content    ChapterContent @relation(fields: [chapter_content_id], references: [id], onDelete: Cascade)
+
+  @@unique([chapter_content_id, sequence_number])
+  @@index([chapter_content_id])
+}
+
+// Categorization Models
+model Genre {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?  @db.Text
+
+  // Relations
+  contents    ContentGenre[]
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?  @db.Text
+
+  // Relations
+  contents    ContentTag[]
+}
+
+// Junction Tables
+model ContentGenre {
+  content_id String
+  genre_id   String
+
+  content    Content    @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  genre      Genre      @relation(fields: [genre_id], references: [id], onDelete: Cascade)
+
+  @@id([content_id, genre_id])
+  @@index([content_id])
+  @@index([genre_id])
+}
+
+model ContentTag {
+  content_id String
+  tag_id     String
+
+  content    Content    @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  tag        Tag        @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([content_id, tag_id])
+  @@index([content_id])
+  @@index([tag_id])
+}
+
+// User Interaction Models
+model Comment {
+  id         String    @id @default(cuid())
+  content    String    @db.Text
+  user_id    String
+  chapter_id String
+  parent_id  String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  // Relations
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  chapter   Chapter   @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("CommentReplies", fields: [parent_id], references: [id], onDelete: SetNull)
+  replies   Comment[] @relation("CommentReplies")
+
+  @@index([user_id])
+  @@index([chapter_id])
+  @@index([parent_id])
+}
+
+model UserLibrary {
+  id              String        @id @default(cuid())
+  user_id         String
+  content_id      String
+  reading_status  ReadingStatus @default(PLAN_TO_READ)
+  last_read_chapter_id String?
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+
+  // Relations
+  user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  content         Content       @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  last_read_chapter Chapter?    @relation(fields: [last_read_chapter_id], references: [id])
+
+  @@unique([user_id, content_id])
+  @@index([user_id])
+  @@index([content_id])
+  @@index([last_read_chapter_id])
+}
+
+model Rating {
+  id         String   @id @default(cuid())
+  user_id    String
+  content_id String
+  score      Int      @db.SmallInt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  content   Content  @relation(fields: [content_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, content_id])
+  @@index([user_id])
+  @@index([content_id])
+}
+
+model ReadingProgress {
+  id                 String   @id @default(cuid())
+  user_id            String
+  chapter_id         String
+  progress_percentage Float    @default(0)
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  chapter  Chapter  @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, chapter_id])
+  @@index([user_id])
+  @@index([chapter_id])
+}
+
+model Bookmark {
+  id           String   @id @default(cuid())
+  user_id      String
+  chapter_id   String
+  page_number  Int?
+  note         String?  @db.Text
+  created_at   DateTime @default(now())
+
+  // Relations
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  chapter  Chapter  @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([chapter_id])
+}
+
+// Enums
+enum ContentType {
+  NOVEL
+  MANGA
+  MANHWA
+}
+
+enum ContentStatus {
+  ONGOING
+  COMPLETED
+  HIATUS
+}
+
+enum ReadingStatus {
+  PLAN_TO_READ
+  READING
+  COMPLETED
+  DROPPED
+}
+
+enum ReadingDirection {
+  LTR
+  RTL
+} 
+// Blog Related Models
+
+model BlogPost {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  content     String      @db.Text
+  excerpt     String?     @db.Text
+  cover_image String?
+  published   Boolean     @default(false)
+  featured    Boolean     @default(false)
+  views       Int         @default(0)
+  author_id   String
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  // Relations
+  author      User        @relation(fields: [author_id], references: [id])
+  categories  BlogPostCategory[]
+  tags        BlogPostTag[]
+  comments    BlogComment[]
+  likes       BlogLike[]
+  seo         BlogSEO?
+
+  @@index([author_id])
+  @@index([published])
+  @@index([featured])
+}
+
+model BlogCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?   @db.Text
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relations
+  posts       BlogPostCategory[]
+}
+
+model BlogTag {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relations
+  posts       BlogPostTag[]
+}
+
+// Junction Tables
+model BlogPostCategory {
+  post_id     String
+  category_id String
+
+  post        BlogPost     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  category    BlogCategory @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@id([post_id, category_id])
+  @@index([post_id])
+  @@index([category_id])
+}
+
+model BlogPostTag {
+  post_id     String
+  tag_id      String
+
+  post        BlogPost  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  tag         BlogTag   @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([post_id, tag_id])
+  @@index([post_id])
+  @@index([tag_id])
+}
+
+model BlogComment {
+  id          String    @id @default(cuid())
+  content     String    @db.Text
+  post_id     String
+  user_id     String
+  parent_id   String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relations
+  post        BlogPost    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent      BlogComment? @relation("CommentReplies", fields: [parent_id], references: [id], onDelete: SetNull)
+  replies     BlogComment[] @relation("CommentReplies")
+
+  @@index([post_id])
+  @@index([user_id])
+  @@index([parent_id])
+}
+
+model BlogLike {
+  id          String    @id @default(cuid())
+  post_id     String
+  user_id     String
+  created_at  DateTime  @default(now())
+
+  // Relations
+  post        BlogPost  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@index([post_id])
+  @@index([user_id])
+}
+
+model BlogSEO {
+  id              String    @id @default(cuid())
+  post_id         String    @unique
+  meta_title      String?
+  meta_description String?  @db.Text
+  meta_keywords   String?
+  og_title        String?
+  og_description  String?   @db.Text
+  og_image        String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  post            BlogPost  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  @@index([post_id])
+} 

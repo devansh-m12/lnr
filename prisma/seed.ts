@@ -23,6 +23,14 @@ async function main() {
   try {
     console.log('Cleaning existing data...');
     const cleanupTasks = [
+      prisma.blogSEO.deleteMany(),
+      prisma.blogLike.deleteMany(),
+      prisma.blogComment.deleteMany(),
+      prisma.blogPostTag.deleteMany(),
+      prisma.blogPostCategory.deleteMany(),
+      prisma.blogPost.deleteMany(),
+      prisma.blogTag.deleteMany(),
+      prisma.blogCategory.deleteMany(),
       prisma.bookmark.deleteMany(),
       prisma.readingProgress.deleteMany(),
       prisma.rating.deleteMany(),
@@ -79,24 +87,13 @@ async function main() {
       },
     });
 
+    // Novel-related seeding
     console.log('Creating genres...');
     const genresData = [
-      {
-        name: 'Fantasy',
-        description: 'Magic, mythical creatures, and epic adventures',
-      },
-      {
-        name: 'Action',
-        description: 'Fast-paced and exciting content',
-      },
-      {
-        name: 'Romance',
-        description: 'Love stories and relationships',
-      },
-      {
-        name: 'Sci-Fi',
-        description: 'Science fiction and futuristic stories',
-      },
+      { name: 'Fantasy', description: 'Magic, mythical creatures, and epic adventures' },
+      { name: 'Action', description: 'Fast-paced and exciting content' },
+      { name: 'Romance', description: 'Love stories and relationships' },
+      { name: 'Sci-Fi', description: 'Science fiction and futuristic stories' },
     ];
 
     const genres = [];
@@ -107,14 +104,8 @@ async function main() {
 
     console.log('Creating tags...');
     const tagsData = [
-      {
-        name: 'Magic System',
-        description: 'Features unique magic systems',
-      },
-      {
-        name: 'Strong Lead',
-        description: 'Powerful main character',
-      },
+      { name: 'Magic System', description: 'Features unique magic systems' },
+      { name: 'Strong Lead', description: 'Powerful main character' },
     ];
 
     const tags = [];
@@ -161,6 +152,46 @@ async function main() {
       },
     });
 
+    // Blog-related seeding
+    console.log('Creating blog categories...');
+    const blogCategories = await prisma.blogCategory.createMany({
+      data: [
+        { name: 'Writing Tips', slug: 'writing-tips', description: 'Tips and tricks for aspiring writers' },
+        { name: 'Author Updates', slug: 'author-updates', description: 'Latest news from our authors' },
+        { name: 'Book Reviews', slug: 'book-reviews', description: 'Reviews of popular novels' },
+      ],
+    });
+
+    console.log('Creating blog tags...');
+    const blogTags = await prisma.blogTag.createMany({
+      data: [
+        { name: 'Writing Advice', slug: 'writing-advice' },
+        { name: 'Author Journey', slug: 'author-journey' },
+        { name: 'Book Recommendations', slug: 'book-recommendations' },
+      ],
+    });
+
+    console.log('Creating blog posts...');
+    const blogPost = await prisma.blogPost.create({
+      data: {
+        title: 'How to Create Compelling Characters',
+        slug: 'how-to-create-compelling-characters',
+        content: 'Creating memorable characters is essential for any story...',
+        excerpt: 'Learn the fundamentals of character development',
+        published: true,
+        featured: true,
+        author_id: authorUser.id,
+        seo: {
+          create: {
+            meta_title: 'Character Creation Guide',
+            meta_description: 'Learn how to create compelling characters for your story',
+            meta_keywords: 'writing, characters, creative writing',
+          },
+        },
+      },
+    });
+
+    // Create user interactions
     console.log('Creating user interactions...');
     await prisma.userLibrary.create({
       data: {
@@ -168,6 +199,21 @@ async function main() {
         content_id: novel.id,
         reading_status: ReadingStatus.READING,
         last_read_chapter_id: chapter.id,
+      },
+    });
+
+    await prisma.blogComment.create({
+      data: {
+        content: 'Great article! Very helpful tips.',
+        post_id: blogPost.id,
+        user_id: readerUser.id,
+      },
+    });
+
+    await prisma.blogLike.create({
+      data: {
+        post_id: blogPost.id,
+        user_id: readerUser.id,
       },
     });
 
