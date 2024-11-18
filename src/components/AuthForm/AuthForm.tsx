@@ -80,7 +80,7 @@ export default function AuthForm({
       <div className="relative h-full w-full max-w-md bg-black px-8 py-12 md:h-auto md:rounded-2xl md:shadow-[0_0_40px_rgba(255,255,255,0.1)]">
         <div className="absolute left-0 top-0 h-16 w-16 rounded-tl-2xl border-l-2 border-t-2 border-white/10" />
         <div className="absolute bottom-0 right-0 h-16 w-16 rounded-br-2xl border-b-2 border-r-2 border-white/10" />
-        
+
         <div className="relative space-y-8">
           <div className="space-y-2">
             <h2 className="text-center text-3xl font-bold tracking-tight text-white">
@@ -131,11 +131,11 @@ export default function AuthForm({
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`group relative flex w-full justify-center rounded-full border border-white/10 px-6 py-3 text-sm font-medium transition-all duration-300 
-                    ${loading 
-                      ? 'bg-white/10 text-transparent' 
+                  className={`group relative flex w-full justify-center rounded-full border border-white/10 px-6 py-3 text-sm font-medium transition-all duration-300 ${
+                    loading
+                      ? 'bg-white/10 text-transparent'
                       : 'bg-white/5 text-white hover:bg-white/10'
-                    } focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50`}
+                  } focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50`}
                 >
                   {/* Animated dots for loading state */}
                   {loading && (

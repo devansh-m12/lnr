@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/db";
-import { auth } from "@/auth";
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/db';
+import { auth } from '@/auth';
 
 // GET - Fetch a single blog post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: { postId: string } },
 ) {
   try {
     const post = await prisma.blogPost.findUnique({
@@ -40,18 +40,15 @@ export async function GET(
     });
 
     if (!post) {
-      return NextResponse.json(
-        { error: "Post not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     return NextResponse.json(post);
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
 }
@@ -59,15 +56,12 @@ export async function GET(
 // PUT - Update a blog post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: { postId: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const data = await request.json();
@@ -90,22 +84,19 @@ export async function PUT(
     });
 
     if (!existingPost) {
-      return NextResponse.json(
-        { error: "Post not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     if (existingPost.author_id !== session.user.id) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Generate new slug if title is updated
     const slug = title
-      ? title.toLowerCase().replace(/[^a-zA-Z0-9\s]/g, "").replace(/\s+/g, "-")
+      ? title
+          .toLowerCase()
+          .replace(/[^a-zA-Z0-9\s]/g, '')
+          .replace(/\s+/g, '-')
       : undefined;
 
     const updatedPost = await prisma.blogPost.update({
@@ -174,8 +165,8 @@ export async function PUT(
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
 }
@@ -183,15 +174,12 @@ export async function PUT(
 // DELETE - Delete a blog post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: { postId: string } },
 ) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if post exists and user is the author
@@ -201,17 +189,11 @@ export async function DELETE(
     });
 
     if (!existingPost) {
-      return NextResponse.json(
-        { error: "Post not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     if (existingPost.author_id !== session.user.id) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     await prisma.blogPost.delete({
@@ -219,14 +201,14 @@ export async function DELETE(
     });
 
     return NextResponse.json(
-      { message: "Post deleted successfully" },
-      { status: 200 }
+      { message: 'Post deleted successfully' },
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
-} 
+}

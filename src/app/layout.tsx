@@ -4,13 +4,13 @@ import './globals.css';
 import React from 'react';
 import { Providers } from '@/app/provider';
 import { Toaster } from '@/components/ui/toaster';
-import { DotGothic16 } from "next/font/google";
-import Header from "@/components/header";
+import { DotGothic16 } from 'next/font/google';
+import Header from '@/components/header';
 
 const dotGothic = DotGothic16({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-dot-gothic",
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-dot-gothic',
 });
 
 export const metadata: Metadata = {

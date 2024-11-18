@@ -1,7 +1,7 @@
 'use client';
 
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 interface TypewriterEffectProps {
   words: {
@@ -41,9 +41,9 @@ export const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
   }, [currentText, currentWordIndex, isDeleting, words]);
 
   return (
-    <span className={cn("inline-block", className)}>
+    <span className={cn('inline-block', className)}>
       {currentText}
       <span className="animate-caret-blink">|</span>
     </span>
   );
-}; 
+};

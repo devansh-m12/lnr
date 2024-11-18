@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/db";
-import { auth } from "@/auth";
-import { Prisma } from "@prisma/client";
-import { z } from "zod";
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/db';
+import { auth } from '@/auth';
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 
 // Query params validation schema
 const QuerySchema = z.object({
@@ -19,16 +19,16 @@ const QuerySchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     // Add logging to debug query parameters
     console.log('Search Params:', Object.fromEntries(searchParams));
-    
+
     // Validate query parameters
     const query = QuerySchema.safeParse(Object.fromEntries(searchParams));
     if (!query.success) {
       return NextResponse.json(
-        { error: "Invalid query parameters", details: query.error.flatten() },
-        { status: 400 }
+        { error: 'Invalid query parameters', details: query.error.flatten() },
+        { status: 400 },
       );
     }
 
@@ -101,9 +101,9 @@ export async function GET(request: NextRequest) {
                   id: true,
                   name: true,
                   slug: true,
-                }
-              }
-            }
+                },
+              },
+            },
           },
           tags: {
             select: {
@@ -112,9 +112,9 @@ export async function GET(request: NextRequest) {
                   id: true,
                   name: true,
                   slug: true,
-                }
-              }
-            }
+                },
+              },
+            },
           },
           _count: {
             select: {
@@ -124,7 +124,7 @@ export async function GET(request: NextRequest) {
           },
         },
         orderBy: {
-          created_at: "desc",
+          created_at: 'desc',
         },
         skip,
         take: limit,
@@ -137,10 +137,10 @@ export async function GET(request: NextRequest) {
     console.log('Total matching posts:', total);
 
     // Transform the response to flatten the structure
-    const transformedPosts = posts.map(post => ({
+    const transformedPosts = posts.map((post) => ({
       ...post,
-      categories: post.categories.map(c => c.category),
-      tags: post.tags.map(t => t.tag),
+      categories: post.categories.map((c) => c.category),
+      tags: post.tags.map((t) => t.tag),
     }));
 
     return NextResponse.json({
@@ -154,14 +154,17 @@ export async function GET(request: NextRequest) {
       debug: {
         totalPosts,
         appliedFilters: where,
-        queryParams: query.data
-      }
+        queryParams: query.data,
+      },
     });
   } catch (error) {
     console.error('Blog GET Error:', error);
     return NextResponse.json(
-      { error: "Failed to fetch blog posts", details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
+      {
+        error: 'Failed to fetch blog posts',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
     );
   }
 }
@@ -171,10 +174,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const data = await request.json();
@@ -193,8 +193,8 @@ export async function POST(request: NextRequest) {
     // Generate slug from title
     const slug = title
       .toLowerCase()
-      .replace(/[^a-zA-Z0-9\s]/g, "")
-      .replace(/\s+/g, "-");
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .replace(/\s+/g, '-');
 
     const post = await prisma.blogPost.create({
       data: {
@@ -253,8 +253,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
 }

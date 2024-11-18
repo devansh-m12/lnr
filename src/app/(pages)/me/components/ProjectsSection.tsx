@@ -10,7 +10,7 @@ interface Project {
 export default function ProjectsSection({ projects }: { projects: Project[] }) {
   return (
     <div className="space-y-12">
-      <motion.h2 
+      <motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="text-4xl font-extralight"
@@ -24,17 +24,14 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 + (index * 0.1) }}
+            transition={{ delay: 0.2 + index * 0.1 }}
             className="border-t border-white/10 pt-8"
           >
-            <h3 className="text-2xl font-extralight mb-4">{project.name}</h3>
-            <p className="text-white/60 mb-6">{project.description}</p>
+            <h3 className="mb-4 text-2xl font-extralight">{project.name}</h3>
+            <p className="mb-6 text-white/60">{project.description}</p>
             <div className="flex flex-wrap gap-4">
               {project.technologies.map((tech, idx) => (
-                <span
-                  key={idx}
-                  className="text-sm text-white/40"
-                >
+                <span key={idx} className="text-sm text-white/40">
                   {tech}
                 </span>
               ))}
@@ -44,4 +41,4 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
       </div>
     </div>
   );
-} 
+}

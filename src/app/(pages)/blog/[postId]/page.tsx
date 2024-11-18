@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Trash2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { auth } from "@/auth";
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Trash2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { auth } from '@/auth';
 
 interface BlogPost {
   id: string;
@@ -42,11 +42,11 @@ export default function BlogPostPage() {
         setLoading(true);
         setError(null);
         const response = await fetch(`/api/b/${params.postId}`);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         setPost(data);
       } catch (error) {
@@ -89,15 +89,15 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="text-xl font-light animate-pulse">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-black text-white">
+        <div className="animate-pulse text-xl font-light">Loading...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-black text-white">
         <div className="text-xl font-light text-red-400">{error}</div>
         <Button
           variant="ghost"
@@ -113,7 +113,7 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-black text-white">
         <div className="text-xl font-light">Post not found</div>
         <Button
           variant="ghost"
@@ -128,8 +128,8 @@ export default function BlogPostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white font-light">
-      <div className="container max-w-4xl mx-auto px-4 py-16">
+    <div className="min-h-screen bg-black font-light text-white">
+      <div className="container mx-auto max-w-4xl px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -137,7 +137,7 @@ export default function BlogPostPage() {
           className="space-y-8"
         >
           {/* Navigation Buttons */}
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <Button
               variant="ghost"
               className="text-white/60 hover:text-white"
@@ -151,7 +151,7 @@ export default function BlogPostPage() {
             {session?.user?.id === post?.author?.id && (
               <Button
                 variant="ghost"
-                className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                className="text-red-500 hover:bg-red-500/10 hover:text-red-400"
                 onClick={handleDelete}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
@@ -162,11 +162,11 @@ export default function BlogPostPage() {
 
           {/* Cover Image */}
           {post.cover_image && (
-            <div className="w-full aspect-video rounded-lg overflow-hidden">
+            <div className="aspect-video w-full overflow-hidden rounded-lg">
               <img
                 src={post.cover_image}
                 alt={post.title}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           )}
@@ -174,7 +174,7 @@ export default function BlogPostPage() {
           {/* Post Header */}
           <div className="space-y-6">
             <h1 className="text-5xl font-extralight">{post.title}</h1>
-            
+
             <div className="flex items-center gap-4">
               <Avatar className="h-10 w-10">
                 <AvatarImage src={post.author.avatar_url} />
@@ -186,18 +186,18 @@ export default function BlogPostPage() {
                   {new Date(post.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric'
+                    day: 'numeric',
                   })}
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {post.categories.map((cat, idx) => (
                 <Badge
                   key={idx}
                   variant="secondary"
-                  className="bg-white/10 hover:bg-white/20 text-white"
+                  className="bg-white/10 text-white hover:bg-white/20"
                 >
                   {cat.category.name}
                 </Badge>
@@ -211,7 +211,7 @@ export default function BlogPostPage() {
           </div>
 
           {/* Engagement Stats */}
-          <div className="flex gap-4 text-white/60 border-t border-white/10 pt-6 mt-8">
+          <div className="mt-8 flex gap-4 border-t border-white/10 pt-6 text-white/60">
             <span>💬 {post._count.comments} Comments</span>
             <span>❤️ {post._count.likes} Likes</span>
           </div>
@@ -219,4 +219,4 @@ export default function BlogPostPage() {
       </div>
     </div>
   );
-} 
+}

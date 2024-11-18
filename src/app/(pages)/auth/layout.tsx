@@ -9,19 +9,19 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   const words = [
-    { text: "Crafting" },
-    { text: "digital" },
-    { text: "experiences" },
-    { text: "and" },
-    { text: "building" },
-    { text: "crazy" },
-    { text: "projects" },
+    { text: 'Crafting' },
+    { text: 'digital' },
+    { text: 'experiences' },
+    { text: 'and' },
+    { text: 'building' },
+    { text: 'crazy' },
+    { text: 'projects' },
   ];
 
   // Matrix text for DEVANSH
   const dotMatrix = [
-    "█▀▄ █▀▀ █ █ ▄▀█ █▄ █ █▀ █ █",
-    "█▄▀ ██▄ ▀▄▀ █▀█ █ ▀█ ▄█ █▀█"
+    '█▀▄ █▀▀ █ █ ▄▀█ █▄ █ █▀ █ █',
+    '█▄▀ ██▄ ▀▄▀ █▀█ █ ▀█ ▄█ █▀█',
   ];
 
   return (
@@ -43,11 +43,11 @@ export default function AuthLayout({
           {/* Subtle glowing corners */}
           <div className="absolute left-0 top-0 h-16 w-16 rounded-tl-2xl border-l-2 border-t-2 border-white/10 shadow-[inset_0_0_15px_rgba(255,255,255,0.1)]" />
           <div className="absolute bottom-0 right-0 h-16 w-16 rounded-br-2xl border-b-2 border-r-2 border-white/10 shadow-[inset_0_0_15px_rgba(255,255,255,0.1)]" />
-          
+
           {/* Content */}
           <div className="relative z-20 space-y-8 text-center">
             {/* Logo with subtle glow */}
-            <div className="relative mx-auto h-28 w-28 group">
+            <div className="group relative mx-auto h-28 w-28">
               <div className="absolute inset-0 rounded-full bg-white/10 blur-xl transition-all duration-500 group-hover:blur-2xl" />
               <Image
                 src="/logo.png"
@@ -62,12 +62,12 @@ export default function AuthLayout({
               {/* Dot Matrix DEVANSH */}
               <div className="space-y-0.5 font-mono">
                 {dotMatrix.map((line, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className="text-[0.6rem] text-white/60 tracking-[0.2em] whitespace-pre animate-fade-in"
-                    style={{ 
+                    className="animate-fade-in whitespace-pre text-[0.6rem] tracking-[0.2em] text-white/60"
+                    style={{
                       animationDelay: `${index * 200}ms`,
-                      textShadow: '0 0 10px rgba(255,255,255,0.3)'
+                      textShadow: '0 0 10px rgba(255,255,255,0.3)',
                     }}
                   >
                     {line}
@@ -81,13 +81,13 @@ export default function AuthLayout({
                   DEVASH
                 </span>
               </h1> */}
-              
+
               <h2 className="text-xl font-light">
-                <span className="text-white/60">Developer</span> • 
-                <span className="text-white/80"> Creator</span> • 
+                <span className="text-white/60">Developer</span> •
+                <span className="text-white/80"> Creator</span> •
                 <span className="text-white/60"> Builder</span>
               </h2>
-              
+
               <div className="h-12">
                 <TypewriterEffect words={words} className="text-white/60" />
               </div>
@@ -117,7 +117,7 @@ export default function AuthLayout({
               <span>Projects: 10+</span>
             </div>
             <div className="flex items-center space-x-1">
-              <div className="h-1 w-1 rounded-full bg-white/20 animate-pulse" />
+              <div className="h-1 w-1 animate-pulse rounded-full bg-white/20" />
               <span>Status: Building</span>
             </div>
           </div>
@@ -126,9 +126,7 @@ export default function AuthLayout({
 
       {/* Right side - Auth forms */}
       <section className="flex w-full items-center justify-center bg-black lg:w-1/2">
-        <div className="w-full max-w-md px-8">
-          {children}
-        </div>
+        <div className="w-full max-w-md px-8">{children}</div>
       </section>
     </div>
   );

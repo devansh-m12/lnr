@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function CreateBlogPage() {
   const router = useRouter();
@@ -43,16 +43,16 @@ export default function CreateBlogPage() {
 
       const data = await response.json();
       toast({
-        title: "Success!",
-        description: "Your blog post has been created.",
+        title: 'Success!',
+        description: 'Your blog post has been created.',
       });
       router.push(`/blog/${data.id}`);
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
-        title: "Error",
-        description: "Failed to create blog post. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to create blog post. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -60,8 +60,8 @@ export default function CreateBlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-light">
-      <div className="container max-w-4xl mx-auto px-4 py-16">
+    <div className="min-h-screen bg-black font-light text-white">
+      <div className="container mx-auto max-w-4xl px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,8 +88,10 @@ export default function CreateBlogPage() {
                   id="title"
                   placeholder="Enter post title"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  className="border-white/10 bg-white/5 text-white"
                   required
                 />
               </div>
@@ -100,8 +102,10 @@ export default function CreateBlogPage() {
                   id="excerpt"
                   placeholder="Brief description of your post"
                   value={formData.excerpt}
-                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white h-20"
+                  onChange={(e) =>
+                    setFormData({ ...formData, excerpt: e.target.value })
+                  }
+                  className="h-20 border-white/10 bg-white/5 text-white"
                   required
                 />
               </div>
@@ -112,8 +116,10 @@ export default function CreateBlogPage() {
                   id="content"
                   placeholder="Write your blog post content here..."
                   value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white min-h-[400px]"
+                  onChange={(e) =>
+                    setFormData({ ...formData, content: e.target.value })
+                  }
+                  className="min-h-[400px] border-white/10 bg-white/5 text-white"
                   required
                 />
               </div>
@@ -124,8 +130,10 @@ export default function CreateBlogPage() {
                   id="cover_image"
                   placeholder="Enter image URL"
                   value={formData.cover_image}
-                  onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  onChange={(e) =>
+                    setFormData({ ...formData, cover_image: e.target.value })
+                  }
+                  className="border-white/10 bg-white/5 text-white"
                 />
               </div>
 
@@ -134,7 +142,9 @@ export default function CreateBlogPage() {
                   <Switch
                     id="published"
                     checked={formData.published}
-                    onCheckedChange={(checked) => setFormData({ ...formData, published: checked })}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, published: checked })
+                    }
                   />
                   <Label htmlFor="published">Publish immediately</Label>
                 </div>
@@ -143,7 +153,9 @@ export default function CreateBlogPage() {
                   <Switch
                     id="featured"
                     checked={formData.featured}
-                    onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, featured: checked })
+                    }
                   />
                   <Label htmlFor="featured">Featured post</Label>
                 </div>
@@ -165,4 +177,4 @@ export default function CreateBlogPage() {
       </div>
     </div>
   );
-} 
+}

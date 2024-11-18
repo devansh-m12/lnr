@@ -7,7 +7,10 @@ interface TextGenerateEffectProps {
   className?: string;
 }
 
-export const TextGenerateEffect = ({ words, className = '' }: TextGenerateEffectProps) => {
+export const TextGenerateEffect = ({
+  words,
+  className = '',
+}: TextGenerateEffectProps) => {
   const [complete, setComplete] = useState(false);
 
   useEffect(() => {
@@ -43,4 +46,4 @@ export const TextGenerateEffect = ({ words, className = '' }: TextGenerateEffect
   };
 
   return renderWords();
-}; 
+};

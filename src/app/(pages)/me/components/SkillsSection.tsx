@@ -17,7 +17,7 @@ interface Skills {
 export default function SkillsSection({ skills }: { skills: Skills }) {
   return (
     <div className="space-y-12">
-      <motion.h2 
+      <motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="text-4xl font-extralight"
@@ -25,13 +25,13 @@ export default function SkillsSection({ skills }: { skills: Skills }) {
         Skills & Technologies
       </motion.h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <motion.div 
+      <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <h3 className="text-white/40 mb-6">Programming Languages</h3>
+          <h3 className="mb-6 text-white/40">Programming Languages</h3>
           <div className="space-y-4">
             {skills.programming.map((skill, index) => (
               <div key={index} className="group">
@@ -47,12 +47,12 @@ export default function SkillsSection({ skills }: { skills: Skills }) {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h3 className="text-white/40 mb-6">Technologies & Frameworks</h3>
+          <h3 className="mb-6 text-white/40">Technologies & Frameworks</h3>
           <div className="space-y-4">
             {skills.technologies_and_frameworks.map((tech, index) => (
               <div key={index} className="group">
@@ -68,16 +68,19 @@ export default function SkillsSection({ skills }: { skills: Skills }) {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="md:col-span-2"
         >
-          <h3 className="text-white/40 mb-6">Additional Skills</h3>
+          <h3 className="mb-6 text-white/40">Additional Skills</h3>
           <div className="flex flex-wrap gap-4">
             {skills.additional_skills.map((skill, index) => (
-              <span key={index} className="px-3 py-1 rounded-full bg-white/5 text-white/60 text-sm">
+              <span
+                key={index}
+                className="rounded-full bg-white/5 px-3 py-1 text-sm text-white/60"
+              >
                 {skill}
               </span>
             ))}
@@ -86,4 +89,4 @@ export default function SkillsSection({ skills }: { skills: Skills }) {
       </div>
     </div>
   );
-} 
+}

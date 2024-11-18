@@ -90,7 +90,10 @@ async function main() {
     // Novel-related seeding
     console.log('Creating genres...');
     const genresData = [
-      { name: 'Fantasy', description: 'Magic, mythical creatures, and epic adventures' },
+      {
+        name: 'Fantasy',
+        description: 'Magic, mythical creatures, and epic adventures',
+      },
       { name: 'Action', description: 'Fast-paced and exciting content' },
       { name: 'Romance', description: 'Love stories and relationships' },
       { name: 'Sci-Fi', description: 'Science fiction and futuristic stories' },
@@ -118,21 +121,17 @@ async function main() {
     const novel = await prisma.content.create({
       data: {
         title: 'The Crystal Mage Chronicles',
-        description: 'An epic fantasy novel about a young mage discovering their powers.',
+        description:
+          'An epic fantasy novel about a young mage discovering their powers.',
         type: ContentType.NOVEL,
         status: ContentStatus.ONGOING,
         author_id: authorUser.id,
         cover_image_url: 'https://example.com/covers/crystal-mage.jpg',
         genres: {
-          create: [
-            { genre_id: genres[0].id },
-            { genre_id: genres[1].id },
-          ],
+          create: [{ genre_id: genres[0].id }, { genre_id: genres[1].id }],
         },
         tags: {
-          create: [
-            { tag_id: tags[0].id },
-          ],
+          create: [{ tag_id: tags[0].id }],
         },
       },
     });
@@ -146,7 +145,8 @@ async function main() {
         chapter_content: {
           create: {
             content_type: ContentType.NOVEL,
-            text_content: 'The morning sun cast long shadows across the academy grounds...',
+            text_content:
+              'The morning sun cast long shadows across the academy grounds...',
           },
         },
       },
@@ -156,9 +156,21 @@ async function main() {
     console.log('Creating blog categories...');
     const blogCategories = await prisma.blogCategory.createMany({
       data: [
-        { name: 'Writing Tips', slug: 'writing-tips', description: 'Tips and tricks for aspiring writers' },
-        { name: 'Author Updates', slug: 'author-updates', description: 'Latest news from our authors' },
-        { name: 'Book Reviews', slug: 'book-reviews', description: 'Reviews of popular novels' },
+        {
+          name: 'Writing Tips',
+          slug: 'writing-tips',
+          description: 'Tips and tricks for aspiring writers',
+        },
+        {
+          name: 'Author Updates',
+          slug: 'author-updates',
+          description: 'Latest news from our authors',
+        },
+        {
+          name: 'Book Reviews',
+          slug: 'book-reviews',
+          description: 'Reviews of popular novels',
+        },
       ],
     });
 
@@ -184,7 +196,8 @@ async function main() {
         seo: {
           create: {
             meta_title: 'Character Creation Guide',
-            meta_description: 'Learn how to create compelling characters for your story',
+            meta_description:
+              'Learn how to create compelling characters for your story',
             meta_keywords: 'writing, characters, creative writing',
           },
         },

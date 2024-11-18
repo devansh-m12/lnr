@@ -191,16 +191,16 @@ const config = {
           '50%': { transform: 'scale(1.05) translate(1%, 1%)' },
         },
         'matrix-fade': {
-          '0%': { 
+          '0%': {
             opacity: '0',
-            transform: 'translateY(-5px)'
+            transform: 'translateY(-5px)',
           },
           '50%': {
             opacity: '0.5',
           },
-          '100%': { 
+          '100%': {
             opacity: '1',
-            transform: 'translateY(0)'
+            transform: 'translateY(0)',
           },
         },
       },
@@ -210,7 +210,7 @@ const config = {
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
         'fade-in': 'fadeIn 0.5s ease-in-out',
         float: 'float 6s ease-in-out infinite',
-        'aurora': 'aurora 15s ease infinite',
+        aurora: 'aurora 15s ease infinite',
         'aurora-delayed': 'aurora 15s ease infinite 5s',
         'subtle-drift': 'subtle-drift 20s ease-in-out infinite',
         'subtle-drift-delayed': 'subtle-drift 20s ease-in-out infinite 10s',

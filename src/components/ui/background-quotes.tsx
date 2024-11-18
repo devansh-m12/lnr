@@ -4,22 +4,40 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 const quotes = [
-  { text: "I feel like Pablo", author: "Kanye West", category: "Hip-Hop" },
-  { text: "I'm not a businessman, I'm a business, man", author: "Jay-Z", category: "Hip-Hop" },
-  { text: "I see dead people", author: "The Sixth Sense", category: "Cinema" },
-  { text: "I'm gonna make him an offer he can't refuse", author: "The Godfather", category: "Cinema" },
-  { text: "Here's looking at you, kid", author: "Casablanca", category: "Cinema" },
-  { text: "Everything I am not made me everything I am", author: "Kanye West", category: "Hip-Hop" },
+  { text: 'I feel like Pablo', author: 'Kanye West', category: 'Hip-Hop' },
+  {
+    text: "I'm not a businessman, I'm a business, man",
+    author: 'Jay-Z',
+    category: 'Hip-Hop',
+  },
+  { text: 'I see dead people', author: 'The Sixth Sense', category: 'Cinema' },
+  {
+    text: "I'm gonna make him an offer he can't refuse",
+    author: 'The Godfather',
+    category: 'Cinema',
+  },
+  {
+    text: "Here's looking at you, kid",
+    author: 'Casablanca',
+    category: 'Cinema',
+  },
+  {
+    text: 'Everything I am not made me everything I am',
+    author: 'Kanye West',
+    category: 'Hip-Hop',
+  },
 ];
 
 export function BackgroundQuotes() {
-  const [visibleQuotes, setVisibleQuotes] = useState<Array<{
-    text: string;
-    author: string;
-    category: string;
-    position: { x: number; y: number };
-    rotation: number;
-  }>>();
+  const [visibleQuotes, setVisibleQuotes] = useState<
+    Array<{
+      text: string;
+      author: string;
+      category: string;
+      position: { x: number; y: number };
+      rotation: number;
+    }>
+  >();
 
   useEffect(() => {
     const generatePositions = () => {
@@ -37,33 +55,33 @@ export function BackgroundQuotes() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none">
+    <div className="pointer-events-none fixed inset-0">
       {visibleQuotes?.map((quote, index) => (
         <motion.div
           key={index}
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ 
+          animate={{
             opacity: 0.15,
             scale: 1,
-            rotate: quote.rotation 
+            rotate: quote.rotation,
           }}
-          transition={{ 
+          transition={{
             duration: 1,
             delay: index * 0.2,
             repeat: Infinity,
-            repeatType: "reverse",
-            repeatDelay: 5
+            repeatType: 'reverse',
+            repeatDelay: 5,
           }}
-          className="absolute text-white text-sm"
+          className="absolute text-sm text-white"
           style={{
             left: `${quote.position.x}%`,
             top: `${quote.position.y}%`,
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <div className="backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10">
+          <div className="rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
             <p className="font-serif italic">{quote.text}</p>
-            <div className="flex justify-between mt-2 text-xs">
+            <div className="mt-2 flex justify-between text-xs">
               <p>- {quote.author}</p>
               <span className="text-gray-400">{quote.category}</span>
             </div>
@@ -72,4 +90,4 @@ export function BackgroundQuotes() {
       ))}
     </div>
   );
-} 
+}

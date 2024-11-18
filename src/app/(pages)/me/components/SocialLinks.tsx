@@ -11,7 +11,11 @@ interface SocialLink {
   title?: string;
 }
 
-export default function SocialLinks({ links }: { links: Record<string, SocialLink> }) {
+export default function SocialLinks({
+  links,
+}: {
+  links: Record<string, SocialLink>;
+}) {
   return (
     <div className="flex flex-wrap gap-6 text-sm">
       {Object.entries(links).map(([platform, data], index) => (
@@ -19,29 +23,29 @@ export default function SocialLinks({ links }: { links: Record<string, SocialLin
           key={platform}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 + (index * 0.1) }}
+          transition={{ delay: 0.4 + index * 0.1 }}
           className="group"
         >
-          <a 
+          <a
             href={data.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white/60 hover:text-white transition-colors"
+            className="text-white/60 transition-colors hover:text-white"
           >
             {platform}
           </a>
           {platform === 'leetcode' && (
-            <div className="text-xs text-white/40 mt-1">
+            <div className="mt-1 text-xs text-white/40">
               {data.problems_solved} solved • Rating: {data.contest_rating}
             </div>
           )}
           {platform === 'github' && (
-            <div className="text-xs text-white/40 mt-1">
+            <div className="mt-1 text-xs text-white/40">
               {data.repositories} repos • {data.stars} stars
             </div>
           )}
           {(platform === 'codechef' || platform === 'codeforces') && (
-            <div className="text-xs text-white/40 mt-1">
+            <div className="mt-1 text-xs text-white/40">
               Rating: {data.rating} • {data.title || data.division}
             </div>
           )}
@@ -49,4 +53,4 @@ export default function SocialLinks({ links }: { links: Record<string, SocialLin
       ))}
     </div>
   );
-} 
+}

@@ -15,7 +15,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white font-light">
+    <div className="min-h-screen bg-black font-light text-white">
       <div className="relative">
         {/* Subtle Background Effects */}
         <div className="absolute inset-0">
@@ -25,13 +25,13 @@ export default function AboutPage() {
 
         {/* Main Content */}
         <div className="relative z-10 px-6 py-24 sm:px-8 md:px-12">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             className="mx-auto max-w-7xl space-y-32"
           >
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -39,7 +39,7 @@ export default function AboutPage() {
               <HeroSection aboutData={aboutData as any} />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -47,7 +47,7 @@ export default function AboutPage() {
               <SkillsSection skills={aboutData.skills} />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
@@ -55,7 +55,7 @@ export default function AboutPage() {
               <AchievementsSection achievements={aboutData.achievements} />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -63,7 +63,7 @@ export default function AboutPage() {
               <ProjectsSection projects={aboutData.projects} />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
