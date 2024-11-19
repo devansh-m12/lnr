@@ -14,7 +14,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, Search, SlidersHorizontal } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
 interface BlogPost {
   id: string;
@@ -26,22 +28,68 @@ interface BlogPost {
     name: string;
     avatar_url: string;
   };
-  categories: Array<{ category: { name: string } }>;
+  categories: Array<{ 
+    category: { 
+      id: string;
+      name: string;
+      slug: string;
+    } 
+  }>;
   _count: {
     comments: number;
     likes: number;
   };
+  featured?: boolean;
+}
+
+interface FilterState {
+  search: string;
+  category: 'all' | string;
+  sort: 'latest' | 'oldest' | 'popular';
+  featured: 'all' | 'true';
+  timeframe: 'all' | 'today' | 'week' | 'month' | 'year';
 }
 
 export default function BlogPage() {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Array<{ id: string; name: string; slug: string }>>([]);
+  const [filters, setFilters] = useState<FilterState>({
+    search: '',
+    category: 'all',
+    sort: 'latest',
+    featured: 'all',
+    timeframe: 'all',
+  });
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/b/categories');
+        const data = await response.json();
+        setCategories(data.categories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/api/b?limit=6');
+        const queryParams = new URLSearchParams();
+        if (filters.search) queryParams.append('search', filters.search);
+        if (filters.category !== 'all') queryParams.append('category', filters.category);
+        if (filters.sort) queryParams.append('sort', filters.sort);
+        if (filters.featured === 'true') queryParams.append('featured', 'true');
+        if (filters.timeframe !== 'all') queryParams.append('timeframe', filters.timeframe);
+        queryParams.append('limit', '6');
+
+        const response = await fetch(`/api/b?${queryParams.toString()}`);
         const data = await response.json();
         setPosts(data.posts);
       } catch (error) {
@@ -52,7 +100,7 @@ export default function BlogPage() {
     };
 
     fetchPosts();
-  }, []);
+  }, [filters]);
 
   const handlePostClick = (postId: string) => {
     router.push(`/blog/${postId}`);
@@ -83,6 +131,129 @@ export default function BlogPage() {
               Thoughts, stories and ideas.
             </p>
           </div>
+
+          {/* Filter Section */}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="relative flex w-full max-w-md items-center">
+                <Search className="absolute left-3 h-4 w-4 text-white/40" />
+                <Input
+                  placeholder="Search posts..."
+                  className="pl-10"
+                  value={filters.search}
+                  onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                />
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => setShowFilters(!showFilters)}
+                className="text-white/60 hover:text-white"
+              >
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                Filters
+              </Button>
+            </div>
+
+            {showFilters && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="grid grid-cols-1 gap-4 rounded-lg border border-white/10 bg-white/5 p-4 md:grid-cols-2 lg:grid-cols-4"
+              >
+                <Select
+                  value={filters.sort}
+                  onValueChange={(value) => setFilters({ ...filters, sort: value as 'latest' | 'oldest' | 'popular' })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="latest">Latest</SelectItem>
+                    <SelectItem value="oldest">Oldest</SelectItem>
+                    <SelectItem value="popular">Most Popular</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={filters.category}
+                  onValueChange={(value) => setFilters({ ...filters, category: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.slug}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={filters.timeframe}
+                  onValueChange={(value) => setFilters({ ...filters, timeframe: value as FilterState['timeframe'] })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Time Period" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Time</SelectItem>
+                    <SelectItem value="today">Today</SelectItem>
+                    <SelectItem value="week">This Week</SelectItem>
+                    <SelectItem value="month">This Month</SelectItem>
+                    <SelectItem value="year">This Year</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={filters.featured}
+                  onValueChange={(value: 'all' | 'true') => setFilters({ ...filters, featured: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Featured Posts" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Posts</SelectItem>
+                    <SelectItem value="true">Featured Only</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="col-span-full flex justify-end">
+                  <Button
+                    variant="secondary"
+                    onClick={() => setFilters({
+                      search: '',
+                      category: 'all',
+                      sort: 'latest',
+                      featured: 'all',
+                      timeframe: 'all',
+                    })}
+                    className="bg-white/10 text-white hover:bg-white/20"
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Loading State */}
+          {loading && (
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            </div>
+          )}
+
+          {/* No Results State */}
+          {!loading && posts.length === 0 && (
+            <div className="flex h-64 flex-col items-center justify-center text-white/60">
+              <p className="text-xl">No posts found</p>
+              <p className="mt-2">Try adjusting your filters</p>
+            </div>
+          )}
 
           {/* Blog Posts Grid */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

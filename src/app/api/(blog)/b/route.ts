@@ -185,9 +185,7 @@ export async function POST(request: NextRequest) {
       cover_image,
       published,
       featured,
-      categories,
-      tags,
-      seo,
+      categories = [],
     } = data;
 
     // Generate slug from title
@@ -206,25 +204,25 @@ export async function POST(request: NextRequest) {
         published: published || false,
         featured: featured || false,
         author_id: session.user.id,
+        // Create categories and link them to the post
         categories: {
-          create: categories?.map((categoryId: string) => ({
+          create: categories.map((categoryName: string) => ({
             category: {
-              connect: { id: categoryId },
+              connectOrCreate: {
+                where: {
+                  name: categoryName,
+                },
+                create: {
+                  name: categoryName,
+                  slug: categoryName
+                    .toLowerCase()
+                    .replace(/[^a-zA-Z0-9\s]/g, '')
+                    .replace(/\s+/g, '-'),
+                },
+              },
             },
           })),
         },
-        tags: {
-          create: tags?.map((tagId: string) => ({
-            tag: {
-              connect: { id: tagId },
-            },
-          })),
-        },
-        ...(seo && {
-          seo: {
-            create: seo,
-          },
-        }),
       },
       include: {
         author: {
@@ -236,25 +234,37 @@ export async function POST(request: NextRequest) {
           },
         },
         categories: {
-          include: {
-            category: true,
+          select: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              },
+            },
           },
         },
-        tags: {
-          include: {
-            tag: true,
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
           },
         },
-        seo: true,
       },
     });
 
     return NextResponse.json(post, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error('Error creating post:', error);
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: 'Failed to create post', details: error.message },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 },
+      { error: 'Failed to create post' },
+      { status: 500 }
     );
   }
 }
