@@ -259,12 +259,12 @@ export async function POST(request: NextRequest) {
     if (error instanceof Error) {
       return NextResponse.json(
         { error: 'Failed to create post', details: error.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
     return NextResponse.json(
       { error: 'Failed to create post' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -11,7 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { ArrowLeft, Loader2, Plus, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import MDXPreview from '@/components/MDXPreview';
 
 interface FormData {
@@ -56,7 +56,7 @@ export default function CreateBlogPage() {
     setFormData({
       ...formData,
       categories: formData.categories.filter(
-        (category) => category !== categoryToRemove
+        (category) => category !== categoryToRemove,
       ),
     });
   };
@@ -89,7 +89,10 @@ export default function CreateBlogPage() {
       console.error('Error creating post:', error);
       toast({
         title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to create blog post. Please try again.',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Failed to create blog post. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -163,13 +166,19 @@ export default function CreateBlogPage() {
                           placeholder="Write your blog post content here... (Supports MDX format)"
                           value={formData.content}
                           onChange={(e) =>
-                            setFormData({ ...formData, content: e.target.value })
+                            setFormData({
+                              ...formData,
+                              content: e.target.value,
+                            })
                           }
                           className="min-h-[400px] border-white/10 bg-white/5 text-white"
                           required
                         />
                       </TabsContent>
-                      <TabsContent value="preview" className="min-h-[400px] rounded-md border border-white/10 bg-white/5 p-4">
+                      <TabsContent
+                        value="preview"
+                        className="min-h-[400px] rounded-md border border-white/10 bg-white/5 p-4"
+                      >
                         <MDXPreview content={formData.content} />
                       </TabsContent>
                     </Tabs>
@@ -180,7 +189,7 @@ export default function CreateBlogPage() {
               <div className="space-y-6 lg:col-span-1">
                 <div className="rounded-lg border border-white/10 bg-white/5 p-6">
                   <h3 className="mb-4 text-lg font-light">Post Settings</h3>
-                  
+
                   <div className="space-y-6">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -226,7 +235,10 @@ export default function CreateBlogPage() {
                           placeholder="Enter image URL"
                           value={formData.cover_image}
                           onChange={(e) =>
-                            setFormData({ ...formData, cover_image: e.target.value })
+                            setFormData({
+                              ...formData,
+                              cover_image: e.target.value,
+                            })
                           }
                           className="border-white/10 bg-white/5 text-white"
                         />

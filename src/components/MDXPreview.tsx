@@ -42,4 +42,4 @@ const MDXPreview: FC<MDXPreviewProps> = ({ content }) => {
   );
 };
 
-export default MDXPreview; 
+export default MDXPreview;

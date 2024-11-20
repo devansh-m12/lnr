@@ -30,7 +30,7 @@ export default function BlogPostPage({ params }: any) {
   const router = useRouter();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [postId , setPostId] = useState<string | null>(null);
+  const [postId, setPostId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!postId) {
@@ -57,7 +57,6 @@ export default function BlogPostPage({ params }: any) {
     };
     getPostId();
   }, [params]);
-
 
   if (loading) {
     return (
@@ -113,7 +112,9 @@ export default function BlogPostPage({ params }: any) {
             <div className="flex items-center gap-4">
               <Avatar className="h-12 w-12 border-2 border-white/10">
                 <AvatarImage src={post.author.avatar_url} />
-                <AvatarFallback className="bg-white/5">{post.author.name[0]}</AvatarFallback>
+                <AvatarFallback className="bg-white/5">
+                  {post.author.name[0]}
+                </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
                 <div className="text-xl font-medium">{post.author.name}</div>
@@ -127,7 +128,9 @@ export default function BlogPostPage({ params }: any) {
               </div>
             </div>
 
-            <h1 className="text-4xl font-light tracking-tight md:text-5xl">{post.title}</h1>
+            <h1 className="text-4xl font-light tracking-tight md:text-5xl">
+              {post.title}
+            </h1>
 
             <div className="flex flex-wrap gap-2">
               {post.categories.map((cat, idx) => (
@@ -153,7 +156,8 @@ export default function BlogPostPage({ params }: any) {
           <div className="mt-12 flex items-center justify-between border-t border-white/10 pt-6">
             <div className="flex gap-6 text-white/60">
               <span className="flex items-center gap-2 transition-colors hover:text-white">
-                <span className="text-lg">💬</span> {post._count.comments} comments
+                <span className="text-lg">💬</span> {post._count.comments}{' '}
+                comments
               </span>
               <span className="flex items-center gap-2 transition-colors hover:text-white">
                 <span className="text-lg">❤️</span> {post._count.likes} likes

@@ -30,8 +30,8 @@ export default function AuthLayout({
       <section className="relative hidden w-1/2 overflow-hidden lg:block">
         {/* Subtle background gradients */}
         <div className="absolute inset-0 bg-black">
-          <div className="absolute -left-4 top-0 h-[500px] w-[500px] animate-subtle-drift rounded-full bg-white/[0.08] blur-[120px] transition-all duration-1000" />
-          <div className="absolute bottom-0 right-0 h-[500px] w-[500px] animate-subtle-drift-delayed rounded-full bg-white/[0.08] blur-[120px] transition-all duration-1000" />
+          <div className="animate-subtle-drift absolute -left-4 top-0 h-[500px] w-[500px] rounded-full bg-white/[0.08] blur-[120px] transition-all duration-1000" />
+          <div className="animate-subtle-drift-delayed absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-white/[0.08] blur-[120px] transition-all duration-1000" />
         </div>
 
         {/* Monochromatic grid background */}

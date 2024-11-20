@@ -15,7 +15,13 @@ import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Plus, Search, SlidersHorizontal } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 
 interface BlogPost {
@@ -28,12 +34,12 @@ interface BlogPost {
     name: string;
     avatar_url: string;
   };
-  categories: Array<{ 
-    category: { 
+  categories: Array<{
+    category: {
       id: string;
       name: string;
       slug: string;
-    } 
+    };
   }>;
   _count: {
     comments: number;
@@ -54,7 +60,9 @@ export default function BlogPage() {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<Array<{ id: string; name: string; slug: string }>>([]);
+  const [categories, setCategories] = useState<
+    Array<{ id: string; name: string; slug: string }>
+  >([]);
   const [filters, setFilters] = useState<FilterState>({
     search: '',
     category: 'all',
@@ -83,10 +91,12 @@ export default function BlogPage() {
       try {
         const queryParams = new URLSearchParams();
         if (filters.search) queryParams.append('search', filters.search);
-        if (filters.category !== 'all') queryParams.append('category', filters.category);
+        if (filters.category !== 'all')
+          queryParams.append('category', filters.category);
         if (filters.sort) queryParams.append('sort', filters.sort);
         if (filters.featured === 'true') queryParams.append('featured', 'true');
-        if (filters.timeframe !== 'all') queryParams.append('timeframe', filters.timeframe);
+        if (filters.timeframe !== 'all')
+          queryParams.append('timeframe', filters.timeframe);
         queryParams.append('limit', '6');
 
         const response = await fetch(`/api/b?${queryParams.toString()}`);
@@ -141,7 +151,9 @@ export default function BlogPage() {
                   placeholder="Search posts..."
                   className="pl-10"
                   value={filters.search}
-                  onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                  onChange={(e) =>
+                    setFilters({ ...filters, search: e.target.value })
+                  }
                 />
               </div>
               <Button
@@ -163,7 +175,12 @@ export default function BlogPage() {
               >
                 <Select
                   value={filters.sort}
-                  onValueChange={(value) => setFilters({ ...filters, sort: value as 'latest' | 'oldest' | 'popular' })}
+                  onValueChange={(value) =>
+                    setFilters({
+                      ...filters,
+                      sort: value as 'latest' | 'oldest' | 'popular',
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Sort by" />
@@ -177,7 +194,9 @@ export default function BlogPage() {
 
                 <Select
                   value={filters.category}
-                  onValueChange={(value) => setFilters({ ...filters, category: value })}
+                  onValueChange={(value) =>
+                    setFilters({ ...filters, category: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Category" />
@@ -194,7 +213,12 @@ export default function BlogPage() {
 
                 <Select
                   value={filters.timeframe}
-                  onValueChange={(value) => setFilters({ ...filters, timeframe: value as FilterState['timeframe'] })}
+                  onValueChange={(value) =>
+                    setFilters({
+                      ...filters,
+                      timeframe: value as FilterState['timeframe'],
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Time Period" />
@@ -210,7 +234,9 @@ export default function BlogPage() {
 
                 <Select
                   value={filters.featured}
-                  onValueChange={(value: 'all' | 'true') => setFilters({ ...filters, featured: value })}
+                  onValueChange={(value: 'all' | 'true') =>
+                    setFilters({ ...filters, featured: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Featured Posts" />
@@ -224,13 +250,15 @@ export default function BlogPage() {
                 <div className="col-span-full flex justify-end">
                   <Button
                     variant="secondary"
-                    onClick={() => setFilters({
-                      search: '',
-                      category: 'all',
-                      sort: 'latest',
-                      featured: 'all',
-                      timeframe: 'all',
-                    })}
+                    onClick={() =>
+                      setFilters({
+                        search: '',
+                        category: 'all',
+                        sort: 'latest',
+                        featured: 'all',
+                        timeframe: 'all',
+                      })
+                    }
                     className="bg-white/10 text-white hover:bg-white/20"
                   >
                     Clear Filters
