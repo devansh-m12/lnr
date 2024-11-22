@@ -115,7 +115,7 @@ export default function Page() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black font-light text-white">
-      <div className="container mx-auto max-w-5xl px-4">
+      <div className="container mx-auto max-w-5xl px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
