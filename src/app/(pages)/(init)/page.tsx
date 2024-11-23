@@ -168,7 +168,7 @@ export default function Page() {
                   Full Stack Developer.
                 </h1>
                 <div className="text-xl font-extralight text-white/60">
-                  Crafting digital experiences
+                  Building Better Ideas then Yesterday !!
                 </div>
               </div>
 
