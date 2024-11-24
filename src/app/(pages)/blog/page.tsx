@@ -117,7 +117,7 @@ export default function BlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black font-light text-white">
+    <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black font-light text-white">
       <div className="container mx-auto max-w-7xl px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -130,14 +130,16 @@ export default function BlogPage() {
             <div className="absolute right-0 top-0">
               <Button
                 onClick={() => router.push('/blog/create')}
-                className="bg-white text-black hover:bg-white/90"
+                className="bg-indigo-500 text-white hover:bg-indigo-600"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Create Post
               </Button>
             </div>
-            <h1 className="mb-6 text-5xl font-extralight">Blog</h1>
-            <p className="text-xl font-extralight text-white/60">
+            <h1 className="mb-6 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-6xl font-light text-transparent">
+              Blog
+            </h1>
+            <p className="text-xl font-extralight text-zinc-400">
               Thoughts, stories and ideas.
             </p>
           </div>
@@ -146,10 +148,10 @@ export default function BlogPage() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <div className="relative flex w-full max-w-md items-center">
-                <Search className="absolute left-3 h-4 w-4 text-white/40" />
+                <Search className="absolute left-3 h-4 w-4 text-zinc-500" />
                 <Input
                   placeholder="Search posts..."
-                  className="pl-10"
+                  className="border-zinc-800 bg-zinc-900/50 pl-10 focus:border-indigo-500 focus:ring-indigo-500"
                   value={filters.search}
                   onChange={(e) =>
                     setFilters({ ...filters, search: e.target.value })
@@ -159,7 +161,7 @@ export default function BlogPage() {
               <Button
                 variant="ghost"
                 onClick={() => setShowFilters(!showFilters)}
-                className="text-white/60 hover:text-white"
+                className="text-zinc-400 hover:bg-zinc-800 hover:text-white"
               >
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
                 Filters
@@ -171,7 +173,7 @@ export default function BlogPage() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="grid grid-cols-1 gap-4 rounded-lg border border-white/10 bg-white/5 p-4 md:grid-cols-2 lg:grid-cols-4"
+                className="grid grid-cols-1 gap-4 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4 backdrop-blur-sm md:grid-cols-2 lg:grid-cols-4"
               >
                 <Select
                   value={filters.sort}
@@ -259,7 +261,7 @@ export default function BlogPage() {
                         timeframe: 'all',
                       })
                     }
-                    className="bg-white/10 text-white hover:bg-white/20"
+                    className="bg-zinc-800 text-white hover:bg-zinc-700"
                   >
                     Clear Filters
                   </Button>
@@ -271,7 +273,7 @@ export default function BlogPage() {
           {/* Loading State */}
           {loading && (
             <div className="flex h-64 items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
             </div>
           )}
 
@@ -294,30 +296,30 @@ export default function BlogPage() {
                 onClick={() => handlePostClick(post.id)}
                 className="cursor-pointer"
               >
-                <Card className="transform border-white/10 bg-white/5 transition-all duration-200 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10">
+                <Card className="group transform border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-indigo-500/50 hover:bg-zinc-800/50">
                   {post.cover_image && (
                     <div className="aspect-video w-full overflow-hidden rounded-t-lg">
                       <img
                         src={post.cover_image}
                         alt={post.title}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     </div>
                   )}
                   <CardHeader>
                     <div className="mb-4 flex items-center gap-4">
-                      <Avatar className="h-8 w-8">
+                      <Avatar className="h-8 w-8 border border-zinc-700">
                         <AvatarImage src={post.author.avatar_url} />
                         <AvatarFallback>{post.author.name[0]}</AvatarFallback>
                       </Avatar>
-                      <div className="text-sm text-white/60">
+                      <div className="text-sm text-zinc-400">
                         {post.author.name}
                       </div>
                     </div>
-                    <CardTitle className="text-xl font-light">
+                    <CardTitle className="text-xl font-light text-white">
                       {post.title}
                     </CardTitle>
-                    <CardDescription className="text-white/60">
+                    <CardDescription className="text-zinc-400">
                       {post.excerpt}
                     </CardDescription>
                   </CardHeader>
@@ -327,14 +329,14 @@ export default function BlogPage() {
                         <Badge
                           key={idx}
                           variant="secondary"
-                          className="bg-white/10 text-white hover:bg-white/20"
+                          className="bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
                         >
                           {cat.category.name}
                         </Badge>
                       ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="text-sm text-white/40">
+                  <CardFooter className="text-sm text-zinc-500">
                     <div className="flex w-full justify-between">
                       <span>
                         {new Date(post.created_at).toLocaleDateString()}
