@@ -127,31 +127,37 @@ export default function BlogPage() {
         >
           {/* Header Section */}
           <div className="relative mb-16 text-center">
-            <div className="absolute right-0 top-0">
+            <div className="absolute right-0 top-0 space-x-4">
               <Button
                 onClick={() => router.push('/blog/create')}
-                className="bg-indigo-500 text-white hover:bg-indigo-600"
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white transition-all hover:from-indigo-600 hover:to-purple-600 hover:shadow-lg hover:shadow-indigo-500/25"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Create Post
               </Button>
             </div>
-            <h1 className="mb-6 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-6xl font-light text-transparent">
-              Blog
-            </h1>
-            <p className="text-xl font-extralight text-zinc-400">
-              Thoughts, stories and ideas.
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h1 className="mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-6xl font-light text-transparent">
+                Blog
+              </h1>
+              <p className="text-xl font-extralight tracking-wide text-zinc-400">
+                Thoughts, stories and ideas.
+              </p>
+            </motion.div>
           </div>
 
           {/* Filter Section */}
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
               <div className="relative flex w-full max-w-md items-center">
                 <Search className="absolute left-3 h-4 w-4 text-zinc-500" />
                 <Input
                   placeholder="Search posts..."
-                  className="border-zinc-800 bg-zinc-900/50 pl-10 focus:border-indigo-500 focus:ring-indigo-500"
+                  className="border-zinc-800 bg-zinc-900/50 pl-10 text-zinc-100 transition-all focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   value={filters.search}
                   onChange={(e) =>
                     setFilters({ ...filters, search: e.target.value })
@@ -161,9 +167,9 @@ export default function BlogPage() {
               <Button
                 variant="ghost"
                 onClick={() => setShowFilters(!showFilters)}
-                className="text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                className="group text-zinc-400 hover:bg-zinc-800/50 hover:text-white"
               >
-                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                <SlidersHorizontal className="mr-2 h-4 w-4 transition-transform group-hover:rotate-180" />
                 Filters
               </Button>
             </div>
@@ -296,27 +302,29 @@ export default function BlogPage() {
                 onClick={() => handlePostClick(post.id)}
                 className="cursor-pointer"
               >
-                <Card className="group transform border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-indigo-500/50 hover:bg-zinc-800/50">
+                <Card className="group relative transform border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500/50 hover:bg-zinc-800/50 hover:shadow-lg hover:shadow-indigo-500/10">
                   {post.cover_image && (
                     <div className="aspect-video w-full overflow-hidden rounded-t-lg">
                       <img
                         src={post.cover_image}
                         alt={post.title}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     </div>
                   )}
                   <CardHeader>
                     <div className="mb-4 flex items-center gap-4">
-                      <Avatar className="h-8 w-8 border border-zinc-700">
+                      <Avatar className="ring-2 ring-zinc-700/50 ring-offset-2 ring-offset-zinc-900">
                         <AvatarImage src={post.author.avatar_url} />
-                        <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+                        <AvatarFallback className="bg-indigo-500/10 text-indigo-400">
+                          {post.author.name[0]}
+                        </AvatarFallback>
                       </Avatar>
-                      <div className="text-sm text-zinc-400">
+                      <div className="text-sm font-medium text-zinc-400">
                         {post.author.name}
                       </div>
                     </div>
-                    <CardTitle className="text-xl font-light text-white">
+                    <CardTitle className="text-xl font-light text-white transition-colors group-hover:text-indigo-400">
                       {post.title}
                     </CardTitle>
                     <CardDescription className="text-zinc-400">
@@ -329,7 +337,7 @@ export default function BlogPage() {
                         <Badge
                           key={idx}
                           variant="secondary"
-                          className="bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20"
+                          className="bg-indigo-500/10 text-indigo-400 transition-colors hover:bg-indigo-500/20"
                         >
                           {cat.category.name}
                         </Badge>
@@ -337,13 +345,17 @@ export default function BlogPage() {
                     </div>
                   </CardContent>
                   <CardFooter className="text-sm text-zinc-500">
-                    <div className="flex w-full justify-between">
-                      <span>
+                    <div className="flex w-full items-center justify-between">
+                      <span className="font-medium">
                         {new Date(post.created_at).toLocaleDateString()}
                       </span>
                       <div className="flex gap-4">
-                        <span>💬 {post._count.comments}</span>
-                        <span>❤️ {post._count.likes}</span>
+                        <span className="flex items-center gap-1 transition-colors hover:text-indigo-400">
+                          💬 {post._count.comments}
+                        </span>
+                        <span className="flex items-center gap-1 transition-colors hover:text-pink-400">
+                          ❤️ {post._count.likes}
+                        </span>
                       </div>
                     </div>
                   </CardFooter>
