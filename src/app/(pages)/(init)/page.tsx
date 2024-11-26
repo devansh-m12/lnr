@@ -7,11 +7,29 @@ interface WeatherData {
   temp: number;
   description: string;
   icon: string;
+  location: string;
 }
 
 interface Quote {
   content: string;
   author: string;
+}
+
+interface OpenMeteoResponse {
+  current: {
+    temperature_2m: number;
+    weather_code: number;
+  };
+}
+
+interface GeocodingResponse {
+  address: {
+    city?: string;
+    town?: string;
+    village?: string;
+    state: string;
+    country: string;
+  };
 }
 
 const QUOTES = [
@@ -46,19 +64,12 @@ const QUOTES = [
   },
 ];
 
-// Add this weather simulation data
-const WEATHER_CONDITIONS = [
-  { temp: 32, description: 'sunny', icon: '01d' },
-  { temp: 30, description: 'partly cloudy', icon: '02d' },
-  { temp: 28, description: 'cloudy', icon: '03d' },
-  { temp: 27, description: 'light rain', icon: '10d' },
-];
-
 export default function Page() {
   const [currentTime, setCurrentTime] = useState('00:00');
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [locationError, setLocationError] = useState<string>('');
 
   useEffect(() => {
     const updateTime = () => {
@@ -78,24 +89,99 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    // Simulate weather changes
-    const updateWeather = () => {
-      const randomWeather =
-        WEATHER_CONDITIONS[
-          Math.floor(Math.random() * WEATHER_CONDITIONS.length)
-        ];
-      // Add some random variation to temperature
-      const tempVariation = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
-      setWeather({
-        ...randomWeather,
-        temp: randomWeather.temp + tempVariation,
-      });
-      setLoading(false);
+    const getWeatherDescription = (code: number): { description: string; icon: string } => {
+      // WMO Weather interpretation codes: https://open-meteo.com/en/docs
+    const weatherCodes: Record<number, { description: string; icon: string }> = {
+      0: { description: 'Clear sky', icon: '01d' },
+      1: { description: 'Mainly clear', icon: '02d' },
+      2: { description: 'Partly cloudy', icon: '02d' },
+      3: { description: 'Overcast', icon: '03d' },
+      45: { description: 'Foggy', icon: '50d' },
+      48: { description: 'Depositing rime fog', icon: '50d' },
+      51: { description: 'Light drizzle', icon: '09d' },
+      53: { description: 'Moderate drizzle', icon: '09d' },
+      55: { description: 'Dense drizzle', icon: '09d' },
+      61: { description: 'Light rain', icon: '10d' },
+      63: { description: 'Moderate rain', icon: '10d' },
+      65: { description: 'Heavy rain', icon: '10d' },
+      71: { description: 'Light snow', icon: '13d' },
+      73: { description: 'Moderate snow', icon: '13d' },
+      75: { description: 'Heavy snow', icon: '13d' },
+      95: { description: 'Thunderstorm', icon: '11d' },
+    };
+    
+      return weatherCodes[code] || { description: 'Unknown', icon: '03d' };
     };
 
-    updateWeather();
+    const getLocationName = async (lat: number, lon: number): Promise<string> => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+        );
+        const data: GeocodingResponse = await response.json();
+        
+        // Get the most specific location name available
+        const cityName = data.address.city || data.address.town || data.address.village || '';
+        const stateName = data.address.state;
+        const countryName = data.address.country;
+
+        return `${cityName}, ${stateName}, ${countryName}`;
+      } catch (error) {
+        console.error('Error fetching location name:', error);
+        return 'Location unknown';
+      }
+    };
+
+    const fetchWeather = async (latitude: number, longitude: number) => {
+      try {
+        const [weatherResponse, locationName] = await Promise.all([
+          fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`
+          ),
+          getLocationName(latitude, longitude)
+        ]);
+
+        const data: OpenMeteoResponse = await weatherResponse.json();
+        const weatherInfo = getWeatherDescription(data.current.weather_code);
+        
+        setWeather({
+          temp: Math.round(data.current.temperature_2m),
+          description: weatherInfo.description,
+          icon: weatherInfo.icon,
+          location: locationName
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+        setLoading(false);
+      }
+    };
+
+    const getCurrentLocation = () => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            fetchWeather(latitude, longitude);
+            setLocationError('');
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            setLocationError('Unable to get location');
+            // Fallback to Delhi coordinates
+            fetchWeather(28.61, 77.23);
+          }
+        );
+      } else {
+        setLocationError('Geolocation is not supported');
+        // Fallback to Delhi coordinates
+        fetchWeather(28.61, 77.23);
+      }
+    };
+
+    getCurrentLocation();
     // Update weather every 30 minutes
-    const weatherInterval = setInterval(updateWeather, 1800000);
+    const weatherInterval = setInterval(getCurrentLocation, 1800000);
     return () => clearInterval(weatherInterval);
   }, []);
 
@@ -134,17 +220,27 @@ export default function Page() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mt-4 flex items-center justify-center gap-2 text-white/60"
+                className="mt-4 space-y-2"
               >
-                <img
-                  src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
-                  alt="weather icon"
-                  className="h-8 w-8"
-                />
-                <span className="text-lg">{weather.temp}°C</span>
-                <span className="text-sm capitalize">
-                  {weather.description}
-                </span>
+                <div className="flex items-center justify-center gap-2 text-white/60">
+                  <img
+                    src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
+                    alt="weather icon"
+                    className="h-8 w-8"
+                  />
+                  <span className="text-lg">{weather.temp}°C</span>
+                  <span className="text-sm capitalize">
+                    {weather.description}
+                  </span>
+                </div>
+                <div className="text-sm text-white/40">
+                  {weather.location}
+                </div>
+                {locationError && (
+                  <div className="text-sm text-red-400">
+                    {locationError}
+                  </div>
+                )}
               </motion.div>
             )}
 
