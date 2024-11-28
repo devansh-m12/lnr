@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Boxes } from '@/components/ui/background-boxes';
 
 interface WeatherData {
   temp: number;
@@ -200,8 +201,13 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black font-light text-white">
-      <div className="container mx-auto max-w-5xl px-4 py-12">
+    <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-b from-slate-950 via-black to-black font-light text-white overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.95)_100%)] z-0" />
+      <Boxes className="opacity-[0.4]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-blue-600/10 via-transparent to-transparent blur-3xl z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-600/5 to-transparent blur-2xl z-0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black z-0" />
+      <div className="container relative z-10 mx-auto max-w-5xl px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
