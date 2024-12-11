@@ -20,8 +20,10 @@ export default function AboutPage() {
         {/* Subtle Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,black_70%,transparent_110%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent blur-3xl" />
         </div>
+
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent blur-3xl" />
 
         {/* Main Content */}
         <div className="relative z-10 px-6 py-24 sm:px-8 md:px-12">
