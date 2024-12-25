@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dotGothic.variable} font-dot-gothic antialiased`}>
+      <script defer src="https://rumros.vercel.app/script.js" data-website-id="0f1ffbb6-7616-4fd8-851e-bc618c12cd9b"></script>
         <Providers>
           <Header />
           <div className="flex">
