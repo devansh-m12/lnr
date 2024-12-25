@@ -5,11 +5,12 @@ import { auth } from '@/auth';
 // GET - Fetch a single blog post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { postId: string } },
+  { params }: { params: any }
 ) {
   try {
+    const { postId } = await params;
     const post = await prisma.blogPost.findUnique({
-      where: { id: params.postId },
+      where: { id: postId },
       include: {
         author: {
           select: {
@@ -56,9 +57,10 @@ export async function GET(
 // PUT - Update a blog post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { postId: string } },
+  { params }: { params: any }
 ) {
   try {
+    const { postId } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -79,7 +81,7 @@ export async function PUT(
 
     // Check if post exists and user is the author
     const existingPost = await prisma.blogPost.findUnique({
-      where: { id: params.postId },
+      where: { id: postId },
       select: { author_id: true },
     });
 
@@ -100,7 +102,7 @@ export async function PUT(
       : undefined;
 
     const updatedPost = await prisma.blogPost.update({
-      where: { id: params.postId },
+      where: { id: postId },
       data: {
         ...(title && { title }),
         ...(slug && { slug }),
@@ -174,9 +176,10 @@ export async function PUT(
 // DELETE - Delete a blog post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { postId: string } },
+  { params }: { params: any }
 ) {
   try {
+    const { postId } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -184,7 +187,7 @@ export async function DELETE(
 
     // Check if post exists and user is the author
     const existingPost = await prisma.blogPost.findUnique({
-      where: { id: params.postId },
+      where: { id: postId },
       select: { author_id: true },
     });
 
@@ -197,7 +200,7 @@ export async function DELETE(
     }
 
     await prisma.blogPost.delete({
-      where: { id: params.postId },
+      where: { id: postId },
     });
 
     return NextResponse.json(
